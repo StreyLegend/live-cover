@@ -1,0 +1,314 @@
+<%- include('../header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('../sidebar') -%>
+
+		<div class="col-xs-9">
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="panel panel-default">
+						<div class="panel-heading"><b>Купить ресурсы</b></div>
+						<div class="panel-body">
+							<!-- <div class="alert alert-danger text-center">
+								<h4>Прием оплат прекращен</h4>
+								<p>
+									<a href="https://vk.com/wall-85107772_434" target="_blank">Подробнее</a>
+								</p>
+							</div> -->
+
+							<table class="table buy_table" id="buy_table">
+								<tr>
+									<th>Кол-во <i class="fa fa-diamond"></i></th>
+									<th>Бонус</th>
+									<th>Стоимость</th>
+									<th> </th>
+								</tr>
+
+								<tr>
+									<td class="resources"></td>
+									<td class="bonus"><span class="label label-info">+ <span></span> <i class="fa fa-diamond"></i></span></td>
+									<td class="sum" data-sum="10000">10000 рублей</td>
+									<td><buttom class="btn btn-sm btn-success">Купить</buttom></td>
+								</tr>
+
+								<tr>
+									<td class="resources"></td>
+									<td class="bonus"><span class="label label-info">+ <span></span> <i class="fa fa-diamond"></i></span></td>
+									<td class="sum" data-sum="5000">5000 рублей</td>
+									<td><buttom class="btn btn-sm btn-success">Купить</buttom></td>
+								</tr>
+
+								<tr>
+									<td class="resources"></td>
+									<td class="bonus"><span class="label label-info">+ <span></span> <i class="fa fa-diamond"></i></span></td>
+									<td class="sum" data-sum="2500">2500 рублей</td>
+									<td><buttom class="btn btn-sm btn-success">Купить</buttom></td>
+								</tr>
+
+								<tr>
+									<td class="resources"></td>
+									<td class="bonus"><span class="label label-info">+ <span></span> <i class="fa fa-diamond"></i></span></td>
+									<td class="sum" data-sum="1000">1000 рублей</td>
+									<td><buttom class="btn btn-sm btn-success">Купить</buttom></td>
+								</tr>
+
+								<tr style="background: #E8F5E9; border: 2px solid #A5D6A7 !important;;">
+									<td style="border: none !important;" class="resources"></td>
+									<td style="border: none !important;" class="bonus"><span class="label label-info">+ <span></span> <i class="fa fa-diamond"></i></span></td>
+									<td style="border: none !important;" class="sum" data-sum="500">500 рублей</td>
+									<td style="border: none !important;"><buttom class="btn btn-sm btn-success">Купить</buttom></td>
+								</tr>
+
+								<tr>
+									<td class="resources"></td>
+									<td class="bonus">-</td>
+									<td class="sum" data-sum="300">300 рублей</td>
+									<td><buttom class="btn btn-sm btn-success">Купить</buttom></td>
+								</tr>
+
+								<tr>
+									<td class="resources"></td>
+									<td class="bonus">-</td>
+									<td class="sum" data-sum="150">150 рублей</td>
+									<td><buttom class="btn btn-sm btn-success">Купить</buttom></td>
+								</tr>
+
+								<tr>
+									<td class="resources"></td>
+									<td class="bonus">-</td>
+									<td class="sum" data-sum="75">75 рублей</td>
+									<td><buttom class="btn btn-sm btn-success">Купить</buttom></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+
+
+					<p class="text-center">
+						<a href="#" style="color: #929292;" data-toggle="modal" data-target="#bay_for_other_user">Я хочу заплатить за другого пользователя</a>
+					</p>
+
+				</div>
+
+				<div class="col-xs-4">
+					<% if(other_user == null) { 
+						var pay_vk_id = user.vk_id;
+					 } else { 
+						var pay_vk_id = other_user.id;
+						%>
+						<div class="panel panel-default" style="border: 2px solid #4CAF50;">
+							<div class="panel-heading">
+								<b>Вы платите за:</b>
+							</div>
+							<div class="panel-body">
+								<a href="https://vk.com/id<%= other_user.id %>" target="_blank">
+									<img src="<%= other_user.photo_50 %>" style="width: 36px; border-radius: 50%;">
+									<%= other_user.first_name %> <%= other_user.last_name %>
+								</a>
+							</div>
+						</div>
+					<% } %>
+
+
+
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<p>
+								<b><i class="fa fa-diamond"></i> Ресурсы</b> - это внутренняя валюта сервиса
+							</p>
+							<p>Ресурсы тратятся на каждое обновление обложки. Мы считаем такую систему "выкупа мощностей" более лояльной чем помесячная подписка. Т.к. в таком случае каждый платит соразмерно нагрузке которую создаёт на наши сервера.</p>
+							<p>43200 <i class="fa fa-diamond"></i> = месяцу обновлений обложки раз в минуту</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+
+
+
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+
+<div class="modal fade" id="bay_for_other_user">
+	<div class="modal-dialog" style="width: 500px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Оплата за другого пользователя</h4>
+			</div>
+			<div class="modal-body">
+				<p>
+					Укажите VK ID пользователя за которого вы хотите произвести оплату.
+				</p>
+
+				<div class="input-group" style="margin-bottom: 15px;">
+					<input type="text" id="vk_id_other_user" class="form-control" placeholder="VK ID">
+					<span class="input-group-btn">
+						<button type="button" id="start_pay_2" class="btn btn-success">Продолжить</button>
+					</span>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" id="start_pay">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Выберите способ оплаты</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row row-5">
+					<!-- <div class="col-xs-4">
+						<div class="pay_method" data-system="yd">
+							<b>Яндекс.Деньги</b>
+							<span>комиссия 0,5%</span>
+						</div>
+					</div>
+					
+					<div class="col-xs-4">
+						<div class="pay_method" data-system="card">
+							<b>Банковской картой</b>
+							<span>комиссия 2%</span>
+						</div>
+					</div>
+					
+					<div class="col-xs-4">
+						<div class="pay_method" data-system="wm">
+							<b>WebMoney</b>
+							<span>комиссия 0,8%</span>
+						</div>
+					</div> -->
+
+
+					<div class="col-xs-6">
+						<div class="pay_method" data-system="free_kassa">
+							<b>Free-Kassa</b>
+							<span>25+ способов оплаты</span>
+						</div>
+					</div>
+					
+					<div class="col-xs-6">
+						<div class="pay_method" data-system="crypto" data-toggle="tooltip" data-original-title="Зачисления происходят после 1 подтверждения">
+							<b>Криптовалютой</b>
+							<span>11+ криптовалют</span>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<form method="POST" id="yandex_form" action="https://money.yandex.ru/quickpay/confirm.xml" target="_blank" style="display:none;">
+<input type="hidden" name="receiver" value="XXXXXXXXXXXX">
+<input type="hidden" name="formcomment" value="Пополнение счёта на live-cover.ru">
+<input type="hidden" name="short-dest" value="Пополнение счёта на live-cover.ru">
+<input type="hidden" name="label" value="<%= pay_vk_id %>">
+<input type="hidden" name="quickpay-form" value="donate">
+<input type="hidden" name="targets" value="Пополнение для vk.com/id<%= pay_vk_id %>">
+<input type="hidden" id="sum_val" name="sum" value="100" data-type="number">
+<input type="hidden" id="payment_type" name="paymentType" value="PC">
+<!--<label><input type="radio" name="paymentType" value="PC" checked> Яндекс.Деньгами (комиссия 0,5%)</label>-->
+<!--<label><input type="radio" name="paymentType" value="AC"> Банковской картой (комиссия 2%)</label><br>-->
+<!--<label><input type="radio" name="paymentType" value="MC">С баланса мобильного</label><br><br>-->
+<input  type="submit" class="btn btn-success" value="Перевести"></form>
+
+
+<form method="POST" id="wm_form" action="https://merchant.webmoney.ru/lmi/payment.asp" accept-charset="windows-1251" target="_blank" style="display:none;">
+	<input type="hidden" id="wm_summ" name="LMI_PAYMENT_AMOUNT" value="12.08">
+	<input type="hidden" name="LMI_PAYMENT_DESC" value="Пополнение счёта live-cover.ru для пользователя vk.com/id<%= pay_vk_id %>">
+	<input type="hidden" name="LMI_PAYMENT_NO" value="1234">
+	<input type="hidden" name="LMI_PAYEE_PURSE" value="XXXXXXXXXXXX">
+	<input type="hidden" name="FIELD_1" value="<%= pay_vk_id %>">
+</form>
+
+
+<form method="GET" id="crypto_form" action="https://api.cryptonator.com/api/merchant/v1/startpayment" target="_blank" style="display:none;">
+	<input type="hidden" name="merchant_id" value="XXXXXXXXXXXX">
+	<input type="hidden" name="item_name" value="Пополнение счёта на live-cover.ru">
+	<input type="hidden" name="item_description" value="От пользователя vk.com/id<%= pay_vk_id %>">
+	<input type="hidden" name="order_id" value="<%= pay_vk_id %>">
+	<input type="hidden" name="invoice_currency" value="rur">
+	<input type="hidden" id="crypto_summ" name="invoice_amount" value="75" data-type="number">
+	<input type="hidden" name="language" value="ru">
+	<input type="submit" value="Оплатить криптовалютой">
+</form>
+
+
+
+<script>
+$(document).ready(function () {
+	$('.pay_method').click(function (e) {
+		var system = $(this).data('system');
+		var sum = $('#start_pay').data('sum');
+
+		if(system == 'yd') {
+			$('#payment_type').val('PC');
+			$('#sum_val').val(komisia.yd(sum));
+			setTimeout(function(){
+				$('#yandex_form').submit()
+			}, 50);
+
+		} else if(system == 'card') {
+			$('#payment_type').val('AC');
+			$('#sum_val').val(komisia.card(sum));
+			setTimeout(function(){
+				$('#yandex_form').submit()
+			}, 50);
+
+		} else if(system == 'wm') {
+			$('#wm_summ').val(sum);
+			setTimeout(function(){
+				$('#wm_form').submit()
+			}, 50);
+
+		} else if(system == 'free_kassa') {
+
+			window.open('/fk_redirect/<%= pay_vk_id %>/'+sum+'/', '_blank');
+
+		} else if(system == 'crypto') {
+			$('#crypto_summ').val(sum);
+			setTimeout(function(){
+				$('#crypto_form').submit()
+			}, 50);
+		}
+	});
+});
+
+var komisia = {
+	yd: function(sum){
+		var a = 0.005;
+		// return (sum + (sum - (sum - (sum * (a / (1 + a)))))).toFixed(2);
+		// return sum + (sum * 0.005);
+		return (sum / 99.5 * 100).toFixed(2);
+	},
+	card: function(sum){
+		var a = 0.02;
+		// return sum + (sum - (sum * (1 - a)));
+		return (sum / 98 * 100).toFixed(2);
+	}
+}
+
+
+
+start_pay_2.onclick = function() {
+	location = '/cabinet/buy/'+$('#vk_id_other_user').val();
+}
+</script>
+
+
+<%- include('../footer') -%>

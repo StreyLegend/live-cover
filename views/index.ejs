@@ -1,0 +1,82 @@
+﻿<%- include('header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('sidebar') -%>
+
+		<div class="col-xs-9">
+			<% if(user.role == 'user') { %>
+			<div class="alert alert-success">
+				<p>
+					<b>Тестовый период:</b> ещё <b><%= hours %> час(ов)</b> и <b><%= user.balance %> ресурсов</b>
+				</p>
+				<p>
+					Перед тем как оплачивать наши услуги, вы можете опробовать все возможности сервиса без каких либо ограничений. 
+					С момента регистрации у вас 3-ое суток на то чтобы потратить 3600 ресурсов (обновлений обложки).
+				</p>
+				<p>
+					Спустя 5 суток после регистрации бонусные ресурсы будут списаны, но вы можете их сохранить<br> произведя оплату до окончания тестового периода.
+				</p>
+				<p>
+					<a href="/cabinet/buy/" class="btn btn-success">Оплатить сейчас</a>
+				</p>
+			</div>
+			<% } else if(user.role == 'user_end') { %>
+				<div class="alert alert-danger">
+					<p>
+						<b>Внимание! Пробный период подошёл к концу.</b><br>
+						Для возобновления работы ваших динамических обложек, вам необходимо купить "ресурсы". 
+					</p>
+					<p>
+						<a href="/cabinet/buy/" class="btn btn-success">Купить ресурсы</a>
+					</p>
+				</div>
+			<% } %>
+
+
+			<div class="panel panel-primary">
+				<!--<div class="panel-heading"><b>Добро пожаловать</b></div>-->
+				<div class="panel-body" style="position: relative; padding-left: 220px;">
+					<b>Обязательно разрешите отправлять вам уведомления Вконтакте.</b> Это необходимо на случай возникновения ошибок с вашим ключём доступа.
+					
+					<script type="text/javascript" src="//vk.com/js/api/openapi.js?146"></script>
+					<div id="vk_allow_messages_from_community" style="position: absolute; top: 18px; left: 15px;"></div>
+					<script type="text/javascript">
+						VK.Widgets.AllowMessagesFromCommunity("vk_allow_messages_from_community", {height: 30}, 85107772);
+					</script>
+				</div>
+			</div>
+
+
+			<% if(cover_count == 0) { %>
+			<div class="panel panel-default">
+				<div class="panel-heading"><b>Начало работы</b></div>
+				<div class="panel-body">
+					<p>Создание динамической обложки занимает не более 5 минут и проходит в 4 этапа:</p>
+					<p><b>1.</b> Перейдите в раздел <a href="/cabinet/groups/">"мои группы"</a> и напротив нужной группы нажмите кнопку "создать обложку".</p>
+					<p><b>2.</b> На открывшейся странице нажмите кнопку "изменить фон" и выберите изображение для фона обложки.</p>
+					<p><b>3.</b> Затем с помощью кнопки "добавить виджет" подключите и настройте необходимые вам виджеты.</p>
+					<p><b>4.</b> Настройте периодичность и расписание обновления обложки. И нажмите кнопку "сохранить обложку"</p>
+				</div>
+			</div>
+			<% } %>
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading"><b>Краткая справка</b></div>
+				<div class="panel-body">
+					<p>
+						<b><i class="fa fa-diamond"></i> Ресурсы</b> - это внутренняя валюта сервиса
+					</p>
+					<p>Ресурсы тратятся на каждое обновление обложки. Мы считаем такую систему "выкупа мощностей" более лояльной чем помесячная подписка. Т.к. в таком случае каждый платит соразмерно нагрузке которую создаёт на наши сервера.</p>
+					<!--<p>43200 <i class="fa fa-diamond"></i> = месяцу обновлений обложки раз в минуту</p>-->
+				</div>
+			</div>
+
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+<%- include('footer') -%>

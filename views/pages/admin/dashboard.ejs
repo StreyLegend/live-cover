@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<title>Document</title>
+
+
+<link rel="shortcut icon" href="/land/favicon.ico">
+
+<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="/css/style.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+</head>
+
+<body style="padding-top: 30px;">
+
+
+<div class="container" id="app">
+<!-- <div class="container-fluid"> -->
+	<div class="row">
+		<div class="col-xs-6">
+			<h2>Пользователи:</h2>
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<b>День:</b><br>
+					<b>Неделя:</b><br>
+					<b>Месяц:</b><br>
+					<b>3 месяца:</b><br>
+					<b>Всего:</b><br>
+				</div>
+			</div>
+
+			<div class="panel panel-default">
+				<chartjs-line></chartjs-line>
+			</div>
+
+			
+		</div>
+	</div>
+</div>
+
+
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
+<script src="//vue-charts.hchspersonal.tk/js/vue-charts.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.min.js"></script>
+<script>
+	Vue.use(VueCharts);
+	const app = new Vue({
+		el: '#app'
+	});
+</script>
+</body>
+</html>

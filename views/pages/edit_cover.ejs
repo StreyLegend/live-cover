@@ -1,0 +1,377 @@
+<%- include('../header') -%>
+
+
+<script>
+	var userGroupsData = <%- JSON.parse(JSON.stringify(userGroups)) %>;
+	var widgetsData = <%- JSON.parse(JSON.stringify(cover.widgets)) %>;
+	var scheduleData = <%- JSON.parse(JSON.stringify(cover.schedule)) %>;
+</script>
+
+
+<div class="container" ng-app="create_cover">
+	<div class="row" ng-controller="main_controler" ng-init="activeStep = 2" ng-cloak>
+		<div ng-init="cover_opt = {group_token: '<%= cover.group_token %>', group_id: <%= cover.group_id %>, status: <%= cover.status==1 ? true : false %>, interval: '<%= cover.interval_d %>', resetType: '<%= cover.reset_type %>'}"></div>
+		
+		<div ng-init="load_data()"></div>
+		<div ng-init="load_schedule()"></div>
+		<div ng-init="cover_id = '<%= cover.secret_key %>'"></div>
+		<div ng-init="load_user_groups()"></div>
+
+
+		<!--<div class="col-xs-12">
+			<ol class="breadcrumb">
+				<li><a href="/cabinet">Главная</a></li>
+				<li><a href="/cabinet/cover">Мои обложки</a></li>
+			</ol>
+		</div>-->
+
+
+		<div class="col-xs-10" style="width: 857px;">
+			<ol class="breadcrumb">
+				<li><a href="/cabinet">Главная</a></li>
+				<li><a href="/cabinet/cover">Мои обложки</a></li>
+			</ol>
+
+			<%- include('cover_editor') -%>
+		</div>
+
+
+		<div class="col-xs-2 cover_editor_menu" style="width: 213px; padding-left: 5px;">
+			<div class="group_panel">
+				<img ng-src="{{userGroups[cover_opt.group_id].photo || '/img/no_photo.png'}}">
+				<span>{{userGroups[cover_opt.group_id].name || 'Нет доступа к группе. Нужны права редактора'}}</span><br>
+				<button class="btn btn-xs btn-default" onclick="$('#edit_group_modal').modal('show')">Изменить группу</button>
+			</div>
+
+
+			<button ng-click="loadBg()" type="button" class="btn btn-default"><i class="fa fa-tw fa-photo"></i> Изменить фон</button>
+			<button ng-click="showGrid ? showGrid=false : showGrid=true" type="button" class="btn btn-default">
+				<span ng-if="!showGrid"><i class="fa fa-tw fa-toggle-off"></i></span>
+				<span ng-if="showGrid" ng-cloak><i class="fa fa-tw fa-toggle-on"></i></span>
+				Мобильная сетка
+			</button>
+			<button ng-click="preview()" type="button" class="btn btn-default"><i class="fa fa-tw fa-eye"></i> Предпросмотр</button>
+
+			<p style="margin: 15px 0 0; text-align: center;"><b>Статус обложки:</b></p>
+			<button ng-click="cover_opt.status ? cover_opt.status=false : cover_opt.status=true" type="button" class="btn btn-default">
+				<span style="color: #e61919;" ng-if="!cover_opt.status"><i class="fa fa-tw fa-toggle-off"></i> Выключена</span>
+				<span ng-if="cover_opt.status" ng-cloak><i style="color: #388e3c;" class="fa fa-tw fa-toggle-on"></i> Включена</span>
+			</button>
+			
+			
+			
+			<!--<button type="button" ng-click="save_cover()" class="btn btn-default" style="margin-top: 25px;"><i class="fa fa-tw fa-copy"></i> Сделать копию</button>-->
+			<button type="button" ng-click="edit_cover()" class="btn btn-success" style="margin-top: 25px;"><i class="fa fa-tw fa-save"></i> Сохранить</button>
+			<button type="button" ng-click="remove_cover()" class="btn btn-danger"><i class="fa fa-tw fa-trash"></i> Удалить обложку</button>
+
+			<div class="panel panel-default" style="margin-top: 20px;">
+				<div class="panel-heading clearfix" style="padding: 10px;">
+					<b>Подключеные виджеты</b>
+				</div>
+				<div class="panel-body" style="padding: 10px;">
+					<div class="layers clearfix" ng-repeat="(i, w) in widgets.slice().reverse()" ng-click="setActiveWidget(widgets.length - 1 - i)" ng-class="{'active': showOpt == widgets.length - 1 - i}">
+						<span>{{w_name(w.name)}}</span>
+						<span style="float: right;"><i class="fa fa-trash" ng-click="widgets.splice(widgets.length - 1 - i, 1)"></i></span>
+					</div>
+
+					<hr style="margin: 5px 0 5px;" ng-if="widgets.length > 0">
+					
+					<div class="btn-group">
+						<button class="btn btn-xs btn-default" type="button" ng-if="widgets.length > 0" ng-click="addWidget(widgets[showOpt])" data-toggle="tooltip" data-original-title="Дублировать слой"><i class="fa fa-copy"></i></button>
+
+						<button class="btn btn-xs btn-default" type="button" ng-if="widgets.length > 0" ng-click="moveWidget(showOpt, 'up');" data-toggle="tooltip" data-original-title="Передвинуть слой вверх"><i class="fa fa-arrow-up"></i></button>
+						<button class="btn btn-xs btn-default" type="button" ng-if="widgets.length > 0" ng-click="moveWidget(showOpt, 'down');" data-toggle="tooltip" data-original-title="Передвинуть слой вниз"><i class="fa fa-arrow-down"></i></button>
+					</div>
+
+					<hr style="margin: 5px 0 10px;">
+					<button type="button" class="btn btn-sm btn-info" ng-click="widgets_modal()" style="width: 100%;"><i class="fa fa-tw fa-plus"></i> Добавить виджет</button>
+				</div>
+			</div>
+		</div>
+		
+
+
+
+
+
+
+
+			<div class="modal fade" id="load_bg">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title"><i class="loading_img fa fa-spinner fa-pulse fa-fw" style="display: none;"></i> Загрузка фона обложки</h4>
+						</div>
+						<div class="modal-body">
+							<div class="drop_cover">
+								Перетащите сюда файл с изображением обложки
+							</div>
+							или <input id="load_image" type="file" accept=".png, .jpg, .jpeg, .gif" style="display: inline-block;">
+
+							<div class="alert alert-info" style="margin-top: 15px;">
+								<p>
+									<b>Требования к файлу:</b><br>
+									- формат: jpg, png (без прозрачности), gif (без анимации)<br>
+									- разрешение: 795x200 или 1590x400 (разрешение для Retina). В случае несоблюдения разрешения конечный результат будет не предскозуемым<br>
+									- размеры: не более 3МБ
+								</p>
+							</div>
+
+							<button style="display: none;" type="button" class="btn btn-success" ng-click="activeStep = 2">Продолжить</button>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+
+			<div class="modal fade" id="w_modal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Добавить виджет</h4>
+						</div>
+						<div class="modal-body widgets_popup">
+							<div class="row row-5">
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('last_sub')">
+										<i class="fa fa-tw fa-users"></i>
+										Последние подписчики
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('best_comment')">
+										<i class="fa fa-tw fa-comments-o"></i>
+										Активные комментаторы
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('best_share')">
+										<i class="fa fa-tw fa-bullhorn"></i>
+										Активные репостеры
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('best_like')">
+										<i class="fa fa-tw fa-thumbs-o-up"></i>
+										Активные лайкеры
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('show_user_to_link')">
+										<i class="fa fa-tw fa-user"></i>
+										Пользователь по ID
+									</div>
+								</div>
+
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('time')">
+										<i class="fa fa-tw fa-calendar"></i>
+										Дата и время
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('timer')">
+										<i class="fa fa-tw fa-clock-o"></i>
+										Обратный отсчёт
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('weather')">
+										<i class="fa fa-tw fa-cloud"></i>
+										Погода <br>(текст)
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('weather_icon')">
+										<i class="fa fa-tw fa-cloud"></i>
+										Погода <br>(иконка)
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('rates')">
+										<i class="fa fa-tw fa-money"></i>
+										Курс валют
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('text')">
+										<i class="fa fa-tw fa-text-height"></i>
+										Произвольный текст
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('text_link')">
+										<i class="fa fa-tw fa-external-link"></i>
+										Текст по ссылке
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('members_count')">
+										<i class="fa fa-tw fa-users"></i>
+										Количество подписчиков
+									</div>
+								</div>
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('birthday')">
+										<i class="fa fa-tw fa-gift"></i>
+										Именинники сегодня
+									</div>
+								</div>
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('probki')">
+										<i class="fa fa-tw fa-car"></i>
+										Пробки
+									</div>
+								</div>
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('rss')">
+										<i class="fa fa-tw fa-rss"></i>
+										Последние новости (RSS)
+									</div>
+								</div>
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('image_to_link')">
+										<i class="fa fa-tw fa-picture-o"></i>
+										Картинка по ссылке
+									</div>
+								</div>
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('random_text')">
+										<i class="fa fa-tw fa-random"></i>
+										Случайный текст
+									</div>
+								</div>
+
+
+
+								
+								<div class="clearfix"></div>
+								<hr style="margin: 7px 0;">
+								
+								
+								<div class="col-xs-12">
+									<h4>Виджеты для YouTube</h4>
+								</div>
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('youtube_last_video')" style="
+										padding-right: 5px;
+										padding-left: 5px;
+										font-size: 11px;
+									">
+										<i class="fa fa-tw fa-youtube-play"></i>
+										Последнее видео на канале
+									</div>
+								</div>
+								
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('youtube_video_to_link')">
+										<i class="fa fa-tw fa-link"></i>
+										Видео по ссылке
+									</div>
+								</div>
+								
+								
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('youtube_channel_info')">
+										<i class="fa fa-tw fa-info-circle"></i>
+										Информация о канале
+									</div>
+								</div>
+
+
+								
+								<div class="clearfix"></div>
+								<hr style="margin: 7px 0;">
+								
+								<div class="col-xs-12">
+									<h4>Виджеты для DonationAlerts.ru</h4>
+								</div>
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('donationalerts_donation_goal')">
+										<i class="fa fa-tw fa-money"></i>
+										Сбор средств
+									</div>
+								</div>
+
+								<div class="col-xs-3">
+									<div class="widget" ng-click="addWidget('donationalerts_instream_stats')" style="font-size: 11px; padding-left: 0; padding-right: 0;">
+										<i class="fa fa-tw fa-bar-chart"></i>
+										Статистика донатов
+									</div>
+								</div>
+								
+								<% if(session.tester === true) { %>
+								<% } %>
+
+							</div><!-- end ROW -->
+
+							
+
+							<!--<hr>
+							<button type="button" class="btn btn-primary" ng-click="addWidget('online')">Текущий онлайн в группе</button>-->
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+
+			
+
+			<div class="modal fade" id="load_progress">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Сохранение..</h4>
+						</div>
+						<div class="modal-body">
+							<p> </p>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+
+			
+
+			<div class="modal fade" id="edit_group_modal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">Выберите группу</h4>
+						</div>
+						<div class="modal-body">
+							<div class="row" style="margin: 0 -5px;">
+								<div class="col-xs-4" style="padding: 0 5px;" ng-repeat="(i, val) in userGroups">
+									<div class="change_group" ng-class="{'active': i == cover_opt.group_id}" ng-click="cover_opt.group_id = i">
+										<img ng-src="{{val.photo}}" alt="{{val.name}}">
+										{{val.name}}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div><!-- /.modal-content -->
+				</div><!-- /.modal-dialog -->
+			</div><!-- /.modal -->
+
+
+
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+
+<%- include('../footer') -%>

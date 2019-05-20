@@ -1,0 +1,3994 @@
+<div class="panel panel-default" id="prev_cover_panel">
+	<div class="panel-body">
+		<% if(cover) { %>
+			<div class="cover_panel" style="background-image: url('/uploads/cover/<%= cover.main_image %>');" ng-init="imageUrl = '<%= cover.main_image %>'" ng-class="{'grid': showGrid}">
+		<% } else { %>
+			<div class="cover_panel" style="background-color: #444;" ng-class="{'grid': showGrid}">
+		<% } %>
+
+
+
+			<div ng-repeat="(i, w) in widgets"  ng-click="setActiveWidget(i)">
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'donationalerts_donation_goal'" ng-style="{'top': w.posY, 'left': w.posX}" ng-class="{'active rails outline': showOpt == i}" my-draggable>
+					<div class="donatalerts_goal_title" style="width: 600px; transform: translate(-50%, 0px); text-align: center;" ng-style="progressBarText1(w, {'left': w.barWidth / 2, 'top': w.textSize * 1.5 * -1})">
+						<span style="position: static;" ng-if="w.titleShow == 'import'">Заголовок из DonationAlerts</span>
+						<span style="position: static;" ng-if="w.titleShow == 'my'">{{w.myTitle}}</span>
+					</div>
+
+					<div class="donatalerts_goal_bar" ng-style="{'width': w.barWidth, 'height': w.barHeight, 'background': w.barBg, 'border-radius': w.barRadius+'px'}">
+						<div class="donatalerts_goal_progressbar" ng-style="{'width': '50%', 'height': w.barHeight, 'background': w.barProgressColor, 'border-top-left-radius': w.barRadius+'px', 'border-bottom-left-radius': w.barRadius+'px'}"></div>
+						<div class="donatalerts_goal_text_in_bar" ng-if="w.showProgressText === true" ng-style="progressBarText2(w, {'width': '100%', 'text-align': 'center', 'line-height': w.barHeight+'px'})">3 000 RUB (50%)</div>
+						
+						<div class="donatalerts_goal_counts" ng-if="w.showGoalBorder === true" ng-style="progressBarText1(w, {'width': '100%', 'bottom': w.textSize * 1.15 * -1}, true)">
+							<span style="float: left; text-align: left; position: static;">0</span>
+							<span style="float: right; text-align: right; position: static;">6 000</span>
+						</div>
+
+						<div class="donatalerts_goal_end_date" ng-if="w.showToDate === true" ng-style="progressBarText1(w, {'width': '100%', 'bottom': w.textSize * 1.15 * -1, 'text-align': 'center'}, true)">
+							Осталось 5 дней
+						</div>
+					</div>
+				</div>
+
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'donationalerts_instream_stats'" ng-style="{'top': w.posY, 'left': w.posX}" ng-class="{'active': showOpt == i}" my-draggable>
+					<div class="donationalerts_instream_stats" ng-style="donationalerts_instream_stats_styles(w)" ng-if="w.viewType == 'list'">
+						<span style="position: static; display: block;" ng-repeat="val in range(1, w.listCount)" ng-style="{'margin-bottom': w.listPadding}">{{w.listTextTemplate}}</span>
+					</div>
+
+					<div ng-if="w.viewType == 'slider'">
+						<div class="donationalerts_instream_stats">
+							<span style="position: static; display: block;" ng-style="donationalerts_instream_stats_styles(w)">{{w.sliderTextTemplate}}</span>
+							<span style="position: static; display: block;" ng-style="donationalerts_instream_stats_styles_2(w)" ng-bind-html="donationalerts_instream_stats_lorem(w)" ng-if="w.sliderShowSecondText == true"></span>
+						</div>
+					</div>
+				</div>
+
+				
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'image_to_link'" ng-style="{'top': w.posY, 'left': w.posX}" ng-class="{'active rails outline': showOpt == i}" my-draggable>
+					<img class="" ng-src="{{w.url}}" ng-style="{'width': w.width}" style="display: block; position: static;">
+				</div>
+
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'online'" ng-style="textStyle(w)" ng-class="{'active': showOpt == i}" my-draggable>
+					<span ng-class="{'bold': w.font_bold, 'caps': w.caps}" style="display: block; position: static;">
+						{{w.text.before}}
+						<span ng-if="w.delimiter == '0'" style="display: inline; position: static;">2521</span>
+						<span ng-if="w.delimiter == '1'" style="display: inline; position: static;">2 521</span>
+						<span ng-if="w.delimiter == '2'" style="display: inline; position: static;">2.521</span>
+						<span ng-if="w.delimiter == '3'" style="display: inline; position: static;">2,521</span>
+						{{w.text.after}}</span>
+				</div>
+
+				
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'random_text'" ng-style="textStyle(w)" ng-class="{'active': showOpt == i}" my-draggable>
+					<span ng-class="{'bold': w.font_bold, 'caps': w.caps}" style="display: block; position: static;" ng-bind-html="newlines(w.text)"></span>
+				</div>
+
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'text'" ng-style="textStyle(w)" ng-class="{'active': showOpt == i}" my-draggable>
+					<span ng-class="{'bold': w.font_bold, 'caps': w.caps}" style="display: block; position: static;" ng-repeat="text in w.text">{{text.val}}</span>
+				</div>
+
+				<div class="cover_panel_w w_text w_rss"  ng-if="w.name == 'rss'" ng-style="textStyle(w)" ng-class="{'active': showOpt == i}" my-draggable>
+					<div ng-init="test_rss = [
+						'В Казани выходит в прокат фильм о татарской Золушке',
+						'Кинорецензия: как Роланд не дошел до Темной башни',
+						'Москва: Как российские фильмы покоряли Венецианский кинофестиваль',
+						'Новая серия «Игры престолов» опубликована в сети раньше выхода в эфир',
+						'В Петербурге состоится показ картины о 80 чудесах света'
+					];"></div>
+					<style>
+						.w_rss span:last-child {margin-bottom: 0 !important;}
+					</style>
+					<span ng-class="{'bold': w.font_bold, 'caps': w.caps}" style="display: block; position: static;" ng-style="{'margin-bottom': w.padding}" ng-repeat="(i, text) in test_rss | limitTo: w.count">
+						<span style="position: static;" ng-if="w.showTime == true">1{{i}}:{{i}}{{i}} </span>{{textLimit(text, w.symbolLimit)}}
+					</span>
+				</div>
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'text_link'" ng-style="cover_panel.style(w)" ng-class="{'active': showOpt == i}" my-draggable>
+					<span ng-class="{'bold': w.font_bold, 'caps': w.caps}" style="display: block; position: static;">
+						{{w.textBefore}} [ваши данные] {{w.textAfter}}
+					</span>
+				</div>
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'members_count'" ng-style="cover_panel.style(w)" ng-class="{'active': showOpt == i}" my-draggable>
+					<span ng-class="{'bold': w.font_bold, 'caps': w.caps}" style="display: block; position: static;">
+						{{w.textBefore}} 
+						<span ng-if="w.delimiter == '0'" style="display: inline; position: static;">23521</span>
+						<span ng-if="w.delimiter == '1'" style="display: inline; position: static;">23 521</span>
+						<span ng-if="w.delimiter == '2'" style="display: inline; position: static;">23.521</span>
+						<span ng-if="w.delimiter == '3'" style="display: inline; position: static;">23,521</span>
+						 {{w.textAfter}}
+					</span>
+				</div>
+
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'youtube_last_video' || w.name == 'youtube_video_to_link'" ng-style="{'top': w.posY, 'left': w.posX}" style="font-family: Arial;" ng-class="{'active': showOpt == i}" my-draggable>
+					<img src="/img/youtube_thumb.png" ng-style="{'width': w.imgWidth, 'height': w.imgWidth / 16 * 9}" style="display: block; position: static;">
+
+					<div ng-if="w.styleWidget == '3' && w.show_title"
+						style="white-space: nowrap;"
+						ng-style="{'top': w.title_offsetY,
+									  'left': w.imgWidth + w.likes_offset,
+									  'font-size': w.title_fontSize,
+									  'color': w.title_color
+									}"
+						ng-class="{'bold': w.title_bold, 'caps': w.title_caps}"
+						ng-bind-html="formatYoutubeTitle(w)">
+					</div>
+
+					<div ng-if="w.styleWidget == '3'"
+						  style="white-space: nowrap;"
+						  ng-style="{
+							  'top': w.likes_offsetY,
+							  'left': w.imgWidth + w.likes_offset,
+							  'font-size': w.likes_fontSize,
+							  'color': w.likes_color
+							}">
+						<div style="position: static;" ng-if="w.show_likes">
+							<i style="position: static;" class="fa fa-thumbs-up"></i> 312 тыс.
+						</div>
+						<div style="position: static;" ng-if="w.show_dislikes">
+							<i style="position: static;" class="fa fa-thumbs-down"></i> 998
+						</div>
+						<div style="position: static;" ng-if="w.show_view">
+							<i style="position: static;" class="fa fa-eye"></i> 1 млн
+						</div>
+						<div style="position: static;" ng-if="w.show_comments">
+							<i style="position: static;" class="fa fa-comment"></i> 500 тыс.
+						</div>
+					</div>
+
+					<div ng-if="w.styleWidget == '1' || w.styleWidget == '2'" style="position: static;">
+						<span ng-if="w.show_likes_bar == true && w.styleWidget == '1'" class="like-bar" style="
+							display: block;
+							position: static;
+							left: -1px;
+							width: 100%;
+							height: 4px;
+							background: #ddd;
+						">
+							<span style="
+								width: 80%;
+								height: 4px;
+								background: #2693e6;
+							"></span>
+						</span>
+						<div ng-if="w.show_likes == true" ng-style="{'font-size': w.likes_fontSize, 'color': w.likes_color, 'top': w.likes_offset + (w.imgWidth / 16 * 9), 'left': 0}">
+							<i style="position: static;" class="fa fa-thumbs-up"></i> 800
+						</div>
+						<div ng-if="w.show_dislikes == true && w.styleWidget == '1'" ng-style="{'font-size': w.likes_fontSize, 'color': w.likes_color, 'top': w.likes_offset + (w.imgWidth / 16 * 9), 'right': 0}">
+							<i style="position: static;" class="fa fa-thumbs-down"></i> 200<br>
+						</div>
+						<div ng-if="w.show_view == true && w.styleWidget == '2'" ng-style="{'font-size': w.likes_fontSize, 'color': w.likes_color, 'top': w.likes_offset + (w.imgWidth / 16 * 9), 'right': 0}">
+							<i style="position: static;" class="fa fa-eye"></i> 20 тыс.<br>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'youtube_channel_info'" ng-style="{'top': w.posY, 'left': w.posX}" style="font-family: Arial;" ng-class="{'active': showOpt == i}" my-draggable>
+					<img src="/img/yotube_channel_icon.jpg" ng-style="{'width': w.image_width, 'height': w.image_width, 'border-radius': w.image_radius+'%'}" style="display: block; position: static;">
+
+					<div style="white-space: nowrap;"
+						  ng-style="youtube_channel_info_pos(w)">
+						<div style="position: static;"
+							  ng-if="w.title_show"
+							  ng-class="{'bold': w.title_bold, 'caps': w.title_caps}"
+							  ng-style="{'color': w.title_color, 'font-size': w.title_fontSize, 'margin-bottom': w.title_paddingY}">
+							Название вашего канала</div>
+
+						<div style="position: static;" ng-class="{'bold': w.text_bold}" ng-if="w.subs_show">
+							<i style="position: static;" class="fa fa-users" ng-if="w.show_icons"></i>
+							<span style="position: static;" ng-if="!w.show_icons">Подписчики:</span>
+							 1 млн
+						</div>
+						<div style="position: static;" ng-class="{'bold': w.text_bold}" ng-if="w.view_show">
+							<i style="position: static;" class="fa fa-eye" ng-if="w.show_icons"></i>
+							<span style="position: static;" ng-if="!w.show_icons">Просмотры:</span>
+							 15 млн
+						</div>
+						<div style="position: static;" ng-class="{'bold': w.text_bold}" ng-if="w.videos_show">
+							<i style="position: static;" class="fa fa-film" ng-if="w.show_icons"></i>
+							<span style="position: static;" ng-if="!w.show_icons">Видео:</span>
+							 35
+						</div>
+					</div>
+				</div>
+
+
+				
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'rates'" ng-style="textStyle(w)" ng-class="{'active': showOpt == i}" my-draggable>
+					<span ng-class="{'bold': w.font_bold, 'caps': w.caps}" style="display: block; position: static;">
+						<i class="fa fa-rub" style="position: static; line-height: 1.2;" ng-if="w.perfix == 'icon' && w.firstCurrency == 'RUB'"></i>
+						<i class="fa fa-dollar" style="position: static; line-height: 1.2;" ng-if="w.perfix == 'icon' && w.firstCurrency == 'USD'"></i>
+						<i class="fa fa-euro" style="position: static; line-height: 1.2;" ng-if="w.perfix == 'icon' && w.firstCurrency == 'EUR'"></i>
+						<i class="fa fa-btc" style="position: static; line-height: 1.2;" ng-if="w.perfix == 'icon' && w.firstCurrency == 'BTC'"></i>
+						<i class="fa fa-angle-double-right" style="position: static; line-height: 1.2;" 
+							ng-if="w.perfix == 'icon' && (w.firstCurrency != 'RUB' && w.firstCurrency != 'USD' && w.firstCurrency != 'EUR' && w.firstCurrency != 'BTC')"></i>
+						<span style="position: static;" ng-if="w.perfix == 'text_code'">{{w.firstCurrency}}</span>
+						 60.32
+					</span>
+				</div>
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'time'" ng-style="cover_panel.style(w)" ng-class="{'active': showOpt == i}" my-draggable>
+					<span ng-class="{'bold': w.font_bold, 'caps': w.caps}" style="display: block; position: static;">{{w.text}} {{showFormatedTime(w.timezone, w.dateFormat)}} {{w.textEnd}}</span>
+				</div>
+
+				<div class="cover_panel_w w_text w_timer" ng-class="{'bold': w.font_bold, 'caps': w.caps, 'active': showOpt == i}" ng-if="w.name == 'timer'" ng-style="timerStyle(w)" my-draggable>
+					<div class="days" ng-style="timerIntStyle(w, 'd')">
+						<span style="position: static;" ng-if="w.hideZero != true">0</span>2<div style="position: static;" ng-style="timerLabelStyle(w)">Дней</div>
+					</div>
+					
+					<div class="hour" ng-style="timerIntStyle(w, 'h')">
+						17<div style="position: static;" ng-style="timerLabelStyle(w)">Часов</div>
+					</div>
+					
+					<div class="mins" ng-style="timerIntStyle(w, 'm')">
+						<span style="position: static;" ng-if="w.hideZero != true">0</span>5<div style="position: static;" ng-style="timerLabelStyle(w)">Минут</div>
+					</div>
+				</div>
+
+				<div class="cover_panel_w w_text"  ng-if="w.name == 'weather'" ng-style="cover_panel.style(w)" ng-class="{'bold': w.font_bold, 'caps': w.caps, 'active': showOpt == i}" my-draggable>
+					<span style="display: block; position: static;">{{w.before_text}} <span style="position: relative;" ng-if="!w.only_temp">солнечно</span> 27°<span style="position: relative;" ng-if="w.show_c">C</span></span>
+				</div>
+
+				<div class="cover_panel_w w_text w_weather_new"  ng-if="w.name == 'weather_icon'" ng-style="cover_panel.style(w)" ng-class="{'bold': w.font_bold, 'caps': w.caps, 'active': showOpt == i}" my-draggable>
+					<div ng-if="w.iconShow" ng-style="{'top': w.iconPosY, 'left': w.iconPosX}" style="transform: translate(-50%, -50%);">
+						<img ng-src="/img/weather_icons/{{w.iconPack}}/02d.png" ng-style="{'width': w.iconSize}" style="display: block; position: static;">
+					</div>
+					<span style="display: block; position: relative;">27°<span style="position: relative;" ng-if="w.show_c">C</span></span>
+					<div ng-if="w.textShow" ng-style="{'top': w.textPosY, 'left': w.textPosX, 'font-size': w.textSize}">облачно</div>
+				</div>
+
+
+
+				<div class="cover_panel_w w_text w_weather_new"  ng-if="w.name == 'probki'" ng-style="cover_panel.style(w)" ng-class="{'bold': w.font_bold, 'caps': w.caps, 'active': showOpt == i}" my-draggable>
+					<div ng-if="w.iconShow" ng-style="{'top': w.iconPosY, 'left': w.iconPosX}" style="transform: translate(-50%, -50%);">
+						<img ng-src="/img/probki_icons/{{w.iconPack}}/yellow.png" ng-style="{'width': w.iconSize}" style="display: block; position: static;">
+					</div>
+					<span style="display: block; position: relative;">3 <span style="position: relative;" ng-if="w.show_bale_text">балла</span></span>
+					<div ng-if="w.textShow" style="width: auto; white-space: nowrap;" ng-style="{'top': w.textPosY, 'left': w.textPosX, 'font-size': w.textSize}">Местами затруднения</div>
+				</div>
+
+
+
+				<div class="cover_panel_w w_last_sub" ng-if="w.name == 'birthday'" ng-class="{'active': showOpt == i}">
+					<div class="avatar" ng-style="{'top': w.posY, 'left': w.posX}" my-draggable>
+						<img src="/img/user_100.jpg" ng-style="avatarStyle(w)">
+					</div>
+					<div class="name pos-{{w.namePos}} format-{{w.nameFormat}}" 
+						ng-class="{'bold': w.font_bold, 'caps': w.caps}" 
+						ng-style="styleLastSubName(w)" my-draggable>
+						<span class="first-name">Александр </span>
+						<span class="last-name">Мухаметзянов</span>
+					</div>
+				</div>
+
+				<div class="cover_panel_w w_last_sub" ng-if="w.name == 'show_user_to_link'" ng-class="{'active': showOpt == i}">
+					<div class="avatar" ng-style="{'top': w.posY, 'left': w.posX}" my-draggable>
+						<img src="/img/user_100.jpg" ng-style="avatarStyle(w)">
+					</div>
+					<div class="name pos-{{w.namePos}} format-{{w.nameFormat}}" 
+						ng-class="{'bold': w.font_bold, 'caps': w.caps}" 
+						ng-style="styleLastSubName(w)" my-draggable>
+						<span class="first-name">Александр </span>
+						<span class="last-name">Мухаметзянов</span>
+					</div>
+				</div>
+
+				<div class="cover_panel_w w_last_sub" ng-if="w.name == 'last_sub'" ng-class="{'active': showOpt == i}">
+					<div class="avatar" ng-style="{'top': w.posY, 'left': w.posX}" my-draggable>
+						<img src="/img/user_100.jpg" ng-style="avatarStyle(w)">
+					</div>
+					<div class="name pos-{{w.namePos}} format-{{w.nameFormat}}" 
+						ng-class="{'bold': w.font_bold, 'caps': w.caps}" 
+						ng-style="styleLastSubName(w)" my-draggable>
+						<span class="first-name">Александр </span>
+						<span class="last-name">Мухаметзянов</span>
+					</div>
+				</div>
+
+
+				<div class="cover_panel_w w_last_sub" ng-if="w.name == 'best_comment'" ng-class="{'active': showOpt == i}">
+					<div class="avatar" ng-style="{'top': w.posY, 'left': w.posX}" my-draggable>
+						<img src="/img/user_100.jpg" ng-style="avatarStyle(w)">
+					</div>
+					<div class="name pos-{{w.namePos}} format-{{w.nameFormat}}" 
+						ng-class="{'bold': w.font_bold, 'caps': w.caps}" 
+						ng-style="styleLastSubName(w)"
+						my-draggable>
+						<span class="first-name">Александр </span>
+						<span class="last-name">Мухаметзянов</span>
+					</div>
+					<div class="icon" ng-if="w.iconShow" ng-style="styleSmallElem(w, 'icon')" style="line-height: 14px;" my-draggable><i class="fa fa-tw fa-comment" style="line-height: 1; position: static;"></i></div>
+					<div class="count" ng-if="w.countShow"  ng-style="styleSmallElem(w, 'count')" my-draggable>40</div>
+				</div>
+
+
+				<div class="cover_panel_w w_last_sub" ng-if="w.name == 'best_like'" ng-class="{'active': showOpt == i}">
+					<div class="avatar" ng-style="{'top': w.posY, 'left': w.posX}" my-draggable>
+						<img src="/img/user_100.jpg" ng-style="avatarStyle(w)">
+					</div>
+					<div class="name pos-{{w.namePos}} format-{{w.nameFormat}}" 
+						ng-class="{'bold': w.font_bold, 'caps': w.caps}" 
+						ng-style="styleLastSubName(w)"
+						my-draggable>
+						<span class="first-name">Александр </span>
+						<span class="last-name">Мухаметзянов</span>
+					</div>
+					<div class="icon" ng-if="w.iconShow" ng-style="styleSmallElem(w, 'icon')" style="line-height: 14px;" my-draggable><i class="fa fa-tw fa-heart" style="line-height: 1; position: static;"></i></div>
+					<div class="count" ng-if="w.countShow"  ng-style="styleSmallElem(w, 'count')" my-draggable>23</div>
+				</div>
+
+
+				<div class="cover_panel_w w_last_sub" ng-if="w.name == 'best_share'" ng-class="{'active': showOpt == i}">
+					<div class="avatar" ng-style="{'top': w.posY, 'left': w.posX}" my-draggable>
+						<img src="/img/user_100.jpg" ng-style="avatarStyle(w)">
+					</div>
+					<div class="name pos-{{w.namePos}} format-{{w.nameFormat}}" 
+						ng-class="{'bold': w.font_bold, 'caps': w.caps}" 
+						ng-style="styleLastSubName(w)"
+						my-draggable>
+						<span class="first-name">Александр </span>
+						<span class="last-name">Мухаметзянов</span>
+					</div>
+					<div class="icon" ng-if="w.iconShow" ng-style="styleSmallElem(w, 'icon')" style="line-height: 14px;" my-draggable><i class="fa fa-tw fa-bullhorn" style="line-height: 1; position: static;"></i></div>
+					<div class="count" ng-if="w.countShow"  ng-style="styleSmallElem(w, 'count')" my-draggable>15</div>
+				</div>
+
+
+			
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="panel panel-default">
+	<div class="panel-heading clearfix">
+		<b style="padding-top: 5px; display: inline-block; font-size: 15px;">Настройки виджета</b>
+		<button type="button" class="btn btn-sm btn-success" style="float: right;" ng-click="widgets_modal()"><i class="fa fa-tw fa-plus"></i> Добавить виджет</button>
+	</div>
+	<!-- <div class="panel-body widgets" ng-init="showOpt = 0"> -->
+	<div class="panel-body widgets" >
+		<!--div class="btn-group" ng-repeat="(i, w) in widgets">
+			<button type="button" ng-click="showOpt = i" class="btn btn-sm btn-info" ng-class="{'active': showOpt == i}">{{w_name(w.name)}}</button>
+			<button type="button" ng-click="widgets.splice(i, 1)" class="btn btn-sm btn-info"><i class="fa fa-close"></i></button>
+		</div-->
+
+
+		<div class="widget clearfix" ng-repeat="(i, w) in widgets" ng-show="showOpt == i" style="background-color: #f7f7f7;">
+			<div class="w_opt" ng-if="w.name == 'youtube_last_video'">
+				<div class="row row-5">
+
+					<div class="col-xs-6 form-horizontal">
+						<div class="form-group">
+							<div class="col-xs-12 control-label">
+								ID YouTube канала 
+							</div>
+							<div class="col-xs-12">
+								<div class="input-group">
+									<input type="text" class="form-control" ng-model="w.channel_id" placeholder="UC6vg25S1AijjLH_YS_qzmJw">
+
+									<span class="input-group-btn">
+										<button class="btn btn-primary" ng-click="get_channel_id(w)">Помощь</button>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Координаты X и Y</div>
+							<div class="col-xs-3">
+								<input type="number" class="form-control" ng-model="w.posX">
+							</div>
+							<div class="col-xs-3">
+								<input type="number" class="form-control" ng-model="w.posY">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Ширина превьюшки</div>
+							<div class="col-xs-6">
+								<input type="number" class="form-control" ng-model="w.imgWidth">
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Стиль виджета</div>
+							<div class="col-xs-6">
+								<select class="form-control" ng-model="w.styleWidget">
+									<option value="1">Вариант 1</option>
+									<option value="2">Вариант 2</option>
+									<option value="3">Вариант 3</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group clearfix">
+							<div class="col-xs-6 control-label">
+								Отступы от превьюшки
+							</div>
+							<div class="col-xs-6">
+								<input type="number" class="form-control" ng-model="w.likes_offset">
+							</div>
+						</div>
+
+						<div class="form-group clearfix">
+							<div class="col-xs-12 control-label" ng-click="w.show_live ? w.show_live=false : w.show_live=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_live"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_live" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Разрешить выводить трансляции
+							</div>
+							<div class="col-xs-12 control-label" ng-if="w.show_live" ng-click="w.show_live_label ? w.show_live_label=false : w.show_live_label=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_live_label"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_live_label" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Помечать трансляцию меткой <span class="label label-danger" style="background-color: #ff0000;"><b>LIVE</b></span>
+							</div>
+						</div>
+
+
+						<div class="form-group clearfix" ng-if="w.styleWidget == '1'">
+							<div class="col-xs-12 control-label" ng-click="w.show_likes_bar ? w.show_likes_bar=false : w.show_likes_bar=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_likes_bar"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_likes_bar" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Индикатор соотношения "Лайки/Дизлайки"
+							</div>
+						</div>
+						<div class="form-group clearfix" ng-if="w.styleWidget == '3'">
+							<div class="col-xs-12 control-label" ng-click="w.show_title ? w.show_title=false : w.show_title=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_title"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_title" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Название видео
+							</div>
+						</div>
+
+						<div class="form-group clearfix">
+							<div class="col-xs-12 control-label" ng-click="w.show_likes ? w.show_likes=false : w.show_likes=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_likes"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_likes" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Счётчик "лайков"
+							</div>
+							<div ng-if="w.styleWidget == '1' || w.styleWidget == '3'" 
+								class="col-xs-12 control-label" ng-click="w.show_dislikes ? w.show_dislikes=false : w.show_dislikes=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_dislikes"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_dislikes" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Счётчик "дизлайков"
+							</div>
+							<div ng-if="w.styleWidget == '2' || w.styleWidget == '3'" 
+								class="col-xs-12 control-label" ng-click="w.show_view ? w.show_view=false : w.show_view=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_view"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_view" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Счётчик "просмотров"
+							</div>
+
+							<div ng-if="w.styleWidget == '3'" 
+								class="col-xs-12 control-label" ng-click="w.show_comments ? w.show_comments=false : w.show_comments=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_comments"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_comments" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Счётчик "комментариев"
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="col-xs-6">
+						<div class="panel panel-info" ng-if="w.show_likes || w.show_dislikes || w.show_comments || w.show_view">
+							<div class="panel-heading">
+								<h3 class="panel-title">Настройки "счетчиков"</h3>
+							</div>
+							<div class="panel-body row">
+								<div class="form-group clearfix" ng-if="w.styleWidget == '3'">
+									<div class="col-xs-6 control-label">
+										Отступ <i class="fa fa-arrows-v"></i>
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.likes_offsetY">
+									</div>
+								</div>
+
+								<div class="form-group clearfix">
+									<div class="col-xs-4 control-label">
+										Размер и цвет текста
+									</div>
+									<div class="col-xs-8">
+										<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.likes_fontSize">
+										<color-picker options="options" ng-model="w.likes_color" style="display: inline-block; float: left; width: 50%;"></color-picker>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+
+						
+						<div class="panel panel-info" ng-if="w.show_title && w.styleWidget == '3'">
+							<div class="panel-heading">
+								<h3 class="panel-title">Настройки заголовка видео</h3>
+							</div>
+							<div class="panel-body row">
+
+								<div class="form-group clearfix">
+									<div class="col-xs-6 control-label">
+										Отступ <i class="fa fa-arrows-v"></i>
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.title_offsetY">
+									</div>
+								</div>
+								
+
+								<div class="form-group clearfix">
+									<div class="col-xs-6 control-label">
+										Максимальная длина строки в символах
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.title_maxLength">
+									</div>
+								</div>
+								
+
+								<div class="form-group clearfix">
+									<div class="col-xs-6 control-label">
+										Максимальное кол-во строк
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.title_maxLines">
+									</div>
+								</div>
+
+								<hr>
+						
+								<div class="form-group clearfix">
+									<div class="col-xs-4 control-label">
+										Размер и цвет текста
+									</div>
+									<div class="col-xs-8">
+										<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.title_fontSize">
+										<color-picker options="options" ng-model="w.title_color" style="display: inline-block; float: left; width: 50%;"></color-picker>
+									</div>
+								</div>
+
+								<div class="col-xs-12 control-label" ng-click="w.title_bold ? w.title_bold=false : w.title_bold=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.title_bold"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.title_bold" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Название видео жирным текстом
+								</div>
+
+
+								<div class="col-xs-12 control-label" ng-click="w.title_caps ? w.title_caps=false : w.title_caps=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.title_caps"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.title_caps" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Название видео КАПСОМ
+								</div>
+
+							</div>
+						</div>
+						
+
+
+					</div>
+				</div>
+			</div><!-- end youtube_last_video -->
+
+
+
+			<div class="w_opt" ng-if="w.name == 'youtube_video_to_link'">
+				<div class="row row-5">
+
+					<div class="col-xs-6 form-horizontal">
+						<div class="form-group">
+							<div class="col-xs-12 control-label">
+								Ссылка на видео
+							</div>
+							<div class="col-xs-12">
+								<input type="text" class="form-control" ng-model="w.video_url" placeholder="https://www.youtube.com/watch?v=sdASFzJfiFssbBs">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Координаты X и Y</div>
+							<div class="col-xs-3">
+								<input type="number" class="form-control" ng-model="w.posX">
+							</div>
+							<div class="col-xs-3">
+								<input type="number" class="form-control" ng-model="w.posY">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Ширина превьюшки</div>
+							<div class="col-xs-6">
+								<input type="number" class="form-control" ng-model="w.imgWidth">
+							</div>
+						</div>
+
+
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Стиль виджета</div>
+							<div class="col-xs-6">
+								<select class="form-control" ng-model="w.styleWidget">
+									<option value="1">Вариант 1</option>
+									<option value="2">Вариант 2</option>
+									<option value="3">Вариант 3</option>
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group clearfix">
+							<div class="col-xs-6 control-label">
+								Отступы от превьюшки
+							</div>
+							<div class="col-xs-6">
+								<input type="number" class="form-control" ng-model="w.likes_offset">
+							</div>
+						</div>
+
+						<div class="form-group clearfix">
+							<div class="col-xs-12 control-label" ng-click="w.show_live_label ? w.show_live_label=false : w.show_live_label=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_live_label"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_live_label" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Помечать трансляцию меткой <span class="label label-danger" style="background-color: #ff0000;"><b>LIVE</b></span>
+							</div>
+						</div>
+
+
+						<div class="form-group clearfix" ng-if="w.styleWidget == '1'">
+							<div class="col-xs-12 control-label" ng-click="w.show_likes_bar ? w.show_likes_bar=false : w.show_likes_bar=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_likes_bar"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_likes_bar" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Индикатор соотношения "Лайки/Дизлайки"
+							</div>
+						</div>
+						<div class="form-group clearfix" ng-if="w.styleWidget == '3'">
+							<div class="col-xs-12 control-label" ng-click="w.show_title ? w.show_title=false : w.show_title=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_title"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_title" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Название видео
+							</div>
+						</div>
+
+						<div class="form-group clearfix">
+							<div class="col-xs-12 control-label" ng-click="w.show_likes ? w.show_likes=false : w.show_likes=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_likes"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_likes" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Счётчик "лайков"
+							</div>
+							<div ng-if="w.styleWidget == '1' || w.styleWidget == '3'" 
+								class="col-xs-12 control-label" ng-click="w.show_dislikes ? w.show_dislikes=false : w.show_dislikes=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_dislikes"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_dislikes" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Счётчик "дизлайков"
+							</div>
+							<div ng-if="w.styleWidget == '2' || w.styleWidget == '3'" 
+								class="col-xs-12 control-label" ng-click="w.show_view ? w.show_view=false : w.show_view=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_view"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_view" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Счётчик "просмотров"
+							</div>
+
+							<div ng-if="w.styleWidget == '3'" 
+								class="col-xs-12 control-label" ng-click="w.show_comments ? w.show_comments=false : w.show_comments=true">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_comments"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.show_comments" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Счётчик "комментариев"
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="col-xs-6">
+						<div class="panel panel-info" ng-if="w.show_likes || w.show_dislikes || w.show_comments || w.show_view">
+							<div class="panel-heading">
+								<h3 class="panel-title">Настройки "счетчиков"</h3>
+							</div>
+							<div class="panel-body row">
+								<div class="form-group clearfix" ng-if="w.styleWidget == '3'">
+									<div class="col-xs-6 control-label">
+										Отступ <i class="fa fa-arrows-v"></i>
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.likes_offsetY">
+									</div>
+								</div>
+
+								<div class="form-group clearfix">
+									<div class="col-xs-4 control-label">
+										Размер и цвет текста
+									</div>
+									<div class="col-xs-8">
+										<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.likes_fontSize">
+										<color-picker options="options" ng-model="w.likes_color" style="display: inline-block; float: left; width: 50%;"></color-picker>
+									</div>
+								</div>
+							</div>
+						</div>
+						
+
+						
+						<div class="panel panel-info" ng-if="w.show_title && w.styleWidget == '3'">
+							<div class="panel-heading">
+								<h3 class="panel-title">Настройки заголовка видео</h3>
+							</div>
+							<div class="panel-body row">
+
+								<div class="form-group clearfix">
+									<div class="col-xs-6 control-label">
+										Отступ <i class="fa fa-arrows-v"></i>
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.title_offsetY">
+									</div>
+								</div>
+								
+
+								<div class="form-group clearfix">
+									<div class="col-xs-6 control-label">
+										Максимальная длина строки в символах
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.title_maxLength">
+									</div>
+								</div>
+								
+
+								<div class="form-group clearfix">
+									<div class="col-xs-6 control-label">
+										Максимальное кол-во строк
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.title_maxLines">
+									</div>
+								</div>
+
+								<hr>
+						
+								<div class="form-group clearfix">
+									<div class="col-xs-4 control-label">
+										Размер и цвет текста
+									</div>
+									<div class="col-xs-8">
+										<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.title_fontSize">
+										<color-picker options="options" ng-model="w.title_color" style="display: inline-block; float: left; width: 50%;"></color-picker>
+									</div>
+								</div>
+
+								<div class="col-xs-12 control-label" ng-click="w.title_bold ? w.title_bold=false : w.title_bold=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.title_bold"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.title_bold" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Название видео жирным текстом
+								</div>
+
+
+								<div class="col-xs-12 control-label" ng-click="w.title_caps ? w.title_caps=false : w.title_caps=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.title_caps"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.title_caps" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Название видео КАПСОМ
+								</div>
+
+							</div>
+						</div>
+					</div>
+					
+
+					<div class="col-xs-12">
+						<div class="alert alert-info" style="font-size: 14px; margin-top: 20px;" >
+							<p>
+								Данный виджет позволяет выводить любое видео по ссылке на YouTube. Имеется множество настроек для изменения внешнего вида выводимого на обложку видео.
+							</p>
+						</div>
+					</div>
+				</div>
+			</div><!-- end youtube_video_to_link -->
+
+
+
+			<div class="w_opt" ng-if="w.name == 'youtube_channel_info'">
+				<div class="row row-5">
+
+					<div class="col-xs-6 form-horizontal">
+						<div class="form-group">
+							<div class="col-xs-12 control-label">
+								ID YouTube канала
+							</div>
+							<div class="col-xs-12">
+								<div class="input-group">
+									<input type="text" class="form-control" ng-model="w.channel_id" placeholder="UC6vg25S1AijjLH_YS_qzmJw">
+
+									<span class="input-group-btn">
+										<button class="btn btn-primary" ng-click="get_channel_id(w)">
+											<i class="fa fa-spinner fa-pulse" ng-if="show_loader"></i> 
+											Помощь
+										</button>
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Координаты X и Y</div>
+							<div class="col-xs-3">
+								<input type="number" class="form-control" ng-model="w.posX">
+							</div>
+							<div class="col-xs-3">
+								<input type="number" class="form-control" ng-model="w.posY">
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Ширина аварата канала</div>
+							<div class="col-xs-6">
+								<input type="number" class="form-control" ng-model="w.image_width">
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="col-xs-6 control-label">Скругление углов индикатора</div>
+							<div class="col-xs-6">
+								<input type="range" min="0" max="50" step="5" ng-model="w.image_radius">
+							</div>
+						</div>
+
+
+						<div class="form-group clearfix">
+							<div class="col-xs-6 control-label">
+								Отступы от аварата <i class="fa fa-arrows-h"></i> / <i class="fa fa-arrows-v"></i>
+							</div>
+							<div class="col-xs-3">
+								<input type="number" class="form-control" ng-model="w.text_offsetX">
+							</div>
+							<div class="col-xs-3">
+								<input type="number" class="form-control" ng-model="w.text_offsetY">
+							</div>
+						</div>
+
+						<div class="form-group clearfix">
+							<div class="col-xs-6 control-label">
+								Позиционирование текста
+							</div>
+							<div class="col-xs-6">
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.text_align = 'right'" ng-class="{'active': w.text_align == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+									<button class="btn btn-default" ng-click="w.text_align = 'center'" ng-class="{'active': w.text_align == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.text_align = 'left'" ng-class="{'active': w.text_align == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+								</div>
+							</div>
+						</div>
+
+
+						<div class="form-group clearfix">
+							<div class="col-xs-12 control-label">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;" ng-click="w.title_show ? w.title_show=false : w.title_show=true">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.title_show"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.title_show" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Название канала
+							</div>
+							
+							<div class="col-xs-12 control-label">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;" ng-click="w.subs_show ? w.subs_show=false : w.subs_show=true">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.subs_show"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.subs_show" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Кол-во подписчиков 
+								<i class="fa fa-question-circle" data-toggle="tooltip" data-original-title="Если отображение числа подписчиков отключено в настойках канала, то будет выводится '0'"></i>
+							</div>
+							
+							<div class="col-xs-12 control-label">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;" ng-click="w.view_show ? w.view_show=false : w.view_show=true">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.view_show"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.view_show" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Кол-во просмотров на канале
+							</div>
+							
+							<div class="col-xs-12 control-label">
+								<span style="font-size: 18px; line-height: initial; vertical-align: middle;" ng-click="w.videos_show ? w.videos_show=false : w.videos_show=true">
+									<i class="fa fa-tw fa-toggle-off" ng-if="!w.videos_show"></i>
+									<i class="fa fa-tw fa-toggle-on" ng-if="w.videos_show" style="color: #4CAF50;" ng-cloak></i>
+								</span> 
+								Кол-во загруженных видео
+							</div>
+						</div>
+
+					</div>
+
+
+					<div class="col-xs-6">
+						<div class="panel panel-info" ng-if="w.subs_show || w.view_show || w.videos_show">
+							<div class="panel-heading">
+								<h3 class="panel-title">Настройки "счетчиков"</h3>
+							</div>
+							<div class="panel-body row">
+								<div class="form-group clearfix">
+									<div class="col-xs-4 control-label">
+										Размер и цвет текста
+									</div>
+									<div class="col-xs-8">
+										<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.text_fontSize">
+										<color-picker options="options" ng-model="w.text_color" style="display: inline-block; float: left; width: 50%;"></color-picker>
+									</div>
+								</div>
+
+								<div class="col-xs-12 control-label" ng-click="w.show_icons ? w.show_icons=false : w.show_icons=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_icons"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.show_icons" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Выводить счётчики с иконками
+								</div>
+								<div class="col-xs-12 control-label" ng-click="w.text_bold ? w.text_bold=false : w.text_bold=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.text_bold"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.text_bold" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Жирный текст
+								</div>
+							</div>
+						</div>
+						
+
+						
+						<div class="panel panel-info" ng-if="w.title_show">
+							<div class="panel-heading">
+								<h3 class="panel-title">Настройки заголовка видео</h3>
+							</div>
+							<div class="panel-body row">
+
+								<div class="form-group clearfix">
+									<div class="col-xs-6 control-label">
+										Отступ снизу
+									</div>
+									<div class="col-xs-6">
+										<input type="number" class="form-control" ng-model="w.title_paddingY">
+									</div>
+								</div>
+								
+								
+						
+								<div class="form-group clearfix">
+									<div class="col-xs-4 control-label">
+										Размер и цвет текста
+									</div>
+									<div class="col-xs-8">
+										<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.title_fontSize">
+										<color-picker options="options" ng-model="w.title_color" style="display: inline-block; float: left; width: 50%;"></color-picker>
+									</div>
+								</div>
+
+								<div class="col-xs-12 control-label" ng-click="w.title_bold ? w.title_bold=false : w.title_bold=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.title_bold"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.title_bold" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Жирный текст
+								</div>
+
+
+								<div class="col-xs-12 control-label" ng-click="w.title_caps ? w.title_caps=false : w.title_caps=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.title_caps"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.title_caps" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Текст КАПСОМ
+								</div>
+
+							</div>
+						</div>
+						
+					</div>
+
+					
+						
+					<div class="col-xs-12">
+						<div class="alert alert-info" style="font-size: 14px; margin-top: 20px;" >
+							<p>
+								Данный виджет позволяет выводить аватар YouTube канала, его название, а также основные метрики (подписчики, просмотры, видео).
+							</p>
+						</div>
+					</div>
+
+				</div>
+			</div><!-- end youtube_channel_info -->
+
+
+
+			<div class="w_opt" ng-if="w.name == 'donationalerts_donation_goal'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-12 control-label">Ссылка для встраивания</div>
+								<div class="col-xs-12">
+									<input type="text" class="form-control" ng-model="w.dataLink">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Ширина и высота индикатора</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.barWidth">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.barHeight">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Скругление углов индикатора</div>
+								<div class="col-xs-6">
+									<input type="range" min="0" max="10" step="1" ng-model="w.barRadius">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Цвет индикатора</div>
+								<div class="col-xs-6">
+									<color-picker options="options" ng-model="w.barProgressColor"></color-picker>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Цвет фона индикатора</div>
+								<div class="col-xs-6">
+									<color-picker options="options" ng-model="w.barBg"></color-picker>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<div class="col-xs-6 control-label"><b>Заголовок</b></div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.titleShow">
+										<option value="none">Нету</option>
+										<option value="my">Свой</option>
+										<option value="import">Из DonationAlerts</option>
+									</select>
+								</div>
+								<div class="col-xs-12" ng-if="w.titleShow == 'my'">
+									<input type="text" class="form-control" ng-model="w.myTitle" placeholder="Ваш заголовок" style="margin-top: 10px;">
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+
+						 <div class="col-xs-5">
+							 <div class="form-group">
+								<div class="control-label" ng-click="w.showProgressText ? w.showProgressText=false : w.showProgressText=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.showProgressText"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.showProgressText" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									<b>Отображать собранную сумму?</b>
+								</div>
+							</div>
+
+							 <div class="form-group">
+								<div class="control-label" ng-click="w.showToDate ? w.showToDate=false : w.showToDate=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.showToDate"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.showToDate" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									<b>Отображать оставшееся время?</b>  <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Оставшееся время будет показываться на обложке, только если на DonationAlerts была указана дата завершения сбора средств!"></i>
+								</div>
+							</div>
+
+							 <div class="form-group">
+								<div class="control-label" ng-click="w.showGoalBorder ? w.showGoalBorder=false : w.showGoalBorder=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.showGoalBorder"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.showGoalBorder" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									<b>Отображать границы сбора?</b>
+								</div>
+							</div>
+
+							<hr style="margin: 10px 0;">
+
+							<div>
+								<b style="font-size: 16px; padding-bottom: 5px; display: block;">Стилизация текста:</b>
+								<ul class="nav nav-tabs" role="tablist">
+									<li role="presentation" class="active"><a href="#btn_1" role="tab" data-toggle="tab" style="padding: 5px 10px; font-size: 12px;">Снаружи индикатора</a></li>
+									<li role="presentation"><a href="#btn_2" role="tab" data-toggle="tab" style="padding: 5px 10px; font-size: 12px;">Внутри индикатора</a></li>
+								</ul>
+
+
+								<div class="tab-content">
+									<div role="tabpanel" class="tab-pane active" id="btn_1">
+										<div class="form-group">
+											<b>Шрифт</b><br>
+											<select class="form-control" ng-model="w.textFont">
+												<option value="Arial">Arial</option>
+												<option value="Press Start 2P">Press Start 2P</option>
+												<option value="Roboto">Roboto</option>
+												<option value="Roboto Slab">Roboto Slab</option>
+												<option value="Lora">Lora</option>
+												<option value="Ubuntu">Ubuntu</option>
+												<option value="Lobster">Lobster</option>
+												<option value="Exo 2">Exo 2</option>
+												<option value="El Messiri">El Messiri</option>
+												<option value="Comfortaa">Comfortaa</option>
+												<option value="Old Standard TT">Old Standard TT</option>
+												<option value="Russo One">Russo One</option>
+												<option value="Poiret One">Poiret One</option>
+												<option value="Philosopher">Philosopher</option>
+												<option value="Bad Script">Bad Script</option>
+												<option value="Marck Script">Marck Script</option>
+												<option value="Alice">Alice</option>
+												<option value="Neucha">Neucha</option>
+												<option value="Ruslan Display">Ruslan Display</option>
+												<option value="Marmelad">Marmelad</option>
+												<option value="Pangolin">Pangolin</option>
+												<option value="Kelly Slab">Kelly Slab</option>
+												<option value="Pattaya">Pattaya</option>
+												<option value="Underdog">Underdog</option>
+											</select>
+										</div>
+										
+										<div class="form-group">
+											<b>Размер и цвет текста</b><br>
+											<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.textSize">
+											<color-picker options="options" ng-model="w.textColor" style="display: inline-block; float: left; width: 50%;"></color-picker>
+										</div>
+
+										<div class="form-group">
+											<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+											<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.textBorder">
+											<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.textBorderColor"></color-picker>
+										</div>
+										
+										<div class="form-group">
+											<label><input type="checkbox" ng-model="w.textBold"> Жирный текст</label>
+										</div>
+									</div>
+
+
+									<div role="tabpanel" class="tab-pane" id="btn_2">
+										<div class="form-group">
+											<b>Шрифт</b><br>
+											<select class="form-control" ng-model="w.progressFont">
+												<option value="Arial">Arial</option>
+												<option value="Press Start 2P">Press Start 2P</option>
+												<option value="Roboto">Roboto</option>
+												<option value="Roboto Slab">Roboto Slab</option>
+												<option value="Lora">Lora</option>
+												<option value="Ubuntu">Ubuntu</option>
+												<option value="Lobster">Lobster</option>
+												<option value="Exo 2">Exo 2</option>
+												<option value="El Messiri">El Messiri</option>
+												<option value="Comfortaa">Comfortaa</option>
+												<option value="Old Standard TT">Old Standard TT</option>
+												<option value="Russo One">Russo One</option>
+												<option value="Poiret One">Poiret One</option>
+												<option value="Philosopher">Philosopher</option>
+												<option value="Bad Script">Bad Script</option>
+												<option value="Marck Script">Marck Script</option>
+												<option value="Alice">Alice</option>
+												<option value="Neucha">Neucha</option>
+												<option value="Ruslan Display">Ruslan Display</option>
+												<option value="Marmelad">Marmelad</option>
+												<option value="Pangolin">Pangolin</option>
+												<option value="Kelly Slab">Kelly Slab</option>
+												<option value="Pattaya">Pattaya</option>
+												<option value="Underdog">Underdog</option>
+											</select>
+										</div>
+										
+										<div class="form-group">
+											<b>Размер и цвет текста</b><br>
+											<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.progressSize">
+											<color-picker options="options" ng-model="w.progressColor" style="display: inline-block; float: left; width: 50%;"></color-picker>
+										</div>
+
+										<div class="form-group">
+											<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+											<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.progressBorder">
+											<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.progressBorderColor"></color-picker>
+										</div>
+										
+										<div class="form-group">
+											<label><input type="checkbox" ng-model="w.progressBold"> Жирный текст</label>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div> 
+
+						
+
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-top: 20px;" >
+								<p>
+									<b>Внимание!</b> В визуальном редакторе вы видите виджет с тестовыми данными, для просмотра конечного результата, используйте функцию "предпросмотра".
+								</p>
+							</div>
+						</div>
+
+					</div>
+				</div><!-- end donationalerts_donation_goal -->
+
+
+
+			<div class="w_opt" ng-if="w.name == 'donationalerts_instream_stats'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-12 control-label">Ссылка для встраивания</div>
+								<div class="col-xs-12">
+									<input type="text" class="form-control" ng-model="w.dataLink">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Режим отображения</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.viewType">
+										<option value="list">Список</option>
+										<option value="slider">Слайдер</option>
+									</select>
+								</div>
+								
+								<div class="col-xs-12">
+									<div class="alert alert-danger" style="margin: 15px 0 0;">
+										<p><b>Слайдер</b> - выводит данные полученные от DonationAlerts в случайном порядке (по 1 донату).</p>
+									</div>
+								</div>
+								<!-- <div class="col-xs-12" style="font-size: 11px; color: #777;">
+									<p><b>Список</b> - выводит данные полученные от DonationAlerts в виде списка.</p>
+									<p><b>Слайдер</b> - выводит данные полученные от DonationAlerts в случайном порядке (по 1 донату).</p>
+								</div> -->
+							</div>
+
+							<div ng-if="w.viewType == 'list'">
+								<div class="form-group">
+									<div class="col-xs-6 control-label">Количество элементов</div>
+									<div class="col-xs-3">
+										<input type="number" class="form-control" ng-model="w.listCount">
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-xs-6 control-label">Отступы от элементов</div>
+									<div class="col-xs-3">
+										<input type="number" class="form-control" ng-model="w.listPadding">
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-xs-12 control-label">Шаблон строки:</div>
+									<div class="col-xs-12">
+										<input type="text" class="form-control" ng-model="w.listTextTemplate">
+									</div>
+									<div class="col-xs-12" style="font-size: 11px; color: #777;">
+										Доступные теги: {username}, {amount} и {currency}
+									</div> 
+								</div>
+							</div>
+
+
+							<div ng-if="w.viewType == 'slider'">
+								<div class="form-group">
+									<div class="col-xs-12 control-label">Шаблон первой строки:</div>
+									<div class="col-xs-12">
+										<input type="text" class="form-control" ng-model="w.sliderTextTemplate">
+									</div>
+									<div class="col-xs-12" style="font-size: 11px; color: #777;">
+										Доступные теги: {username}, {amount} и {currency}
+									</div> 
+								</div>
+
+								<hr style="margin: 10px 0; border-color: #ccc;">
+
+								<div class="form-group col-xs-12">
+									<div class="control-label" ng-click="w.sliderShowSecondText ? w.sliderShowSecondText=false : w.sliderShowSecondText=true">
+										<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+											<i class="fa fa-tw fa-toggle-off" ng-if="!w.sliderShowSecondText"></i>
+											<i class="fa fa-tw fa-toggle-on" ng-if="w.sliderShowSecondText" style="color: #4CAF50;" ng-cloak></i>
+										</span> 
+										<b>Выводить второй строкой сообщение (если есть)</b>
+									</div>
+								</div>
+
+								<div class="form-group" ng-if="w.sliderShowSecondText == true">
+									<div class="col-xs-9 control-label">Отступ от первой строки</div>
+									<div class="col-xs-3">
+										<input type="number" class="form-control" ng-model="w.textPadding">
+									</div>
+								</div>
+
+								<div class="form-group" ng-if="w.sliderShowSecondText == true">
+									<div class="col-xs-9 control-label">Максимальная длина</div>
+									<div class="col-xs-3">
+										<input type="number" class="form-control" ng-model="w.sliderSecondTextMax">
+									</div>
+									<div class="col-xs-12" style="font-size: 11px; color: #777;">
+										Введите 0 если не хотите ограничивать длину сообщения
+									</div> 
+								</div>
+
+								<div class="form-group" ng-if="w.sliderShowSecondText == true">
+									<div class="col-xs-9 control-label">Кол-во символов для переноса строки</div>
+									<div class="col-xs-3">
+										<input type="number" class="form-control" ng-model="w.sliderSecondTextBr">
+									</div>
+								</div>
+							</div>
+
+
+					
+						</div><!-- end col-xs-7 form-horizontal -->
+
+
+						 <div class="col-xs-5">
+							<div class="form-horizontal">
+
+								<div class="form-group">
+									<div class="col-xs-5 control-label">Позиция текста</div>
+										<div class="col-xs-7">
+										<div class="btn-group">
+											<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+											<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+											<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+										</div>
+									</div>
+								</div>
+
+								<hr style="margin: 10px 0; border-color: #ccc;">
+								<h4  ng-if="w.viewType == 'slider' && w.sliderShowSecondText" style="color: #059ecc;"><b>Настройки первой строки:</b></h4>
+
+								<div class="form-group">
+									<div class="col-xs-3 control-label">Шрифт</div>
+									<div class="col-xs-9">
+										<select class="form-control" ng-model="w.textFont">
+											<option value="Arial">Arial</option>
+											<option value="Press Start 2P">Press Start 2P</option>
+											<option value="Roboto">Roboto</option>
+											<option value="Roboto Slab">Roboto Slab</option>
+											<option value="Lora">Lora</option>
+											<option value="Ubuntu">Ubuntu</option>
+											<option value="Lobster">Lobster</option>
+											<option value="Exo 2">Exo 2</option>
+											<option value="El Messiri">El Messiri</option>
+											<option value="Comfortaa">Comfortaa</option>
+											<option value="Old Standard TT">Old Standard TT</option>
+											<option value="Russo One">Russo One</option>
+											<option value="Poiret One">Poiret One</option>
+											<option value="Philosopher">Philosopher</option>
+											<option value="Bad Script">Bad Script</option>
+											<option value="Marck Script">Marck Script</option>
+											<option value="Alice">Alice</option>
+											<option value="Neucha">Neucha</option>
+											<option value="Ruslan Display">Ruslan Display</option>
+											<option value="Marmelad">Marmelad</option>
+											<option value="Pangolin">Pangolin</option>
+											<option value="Kelly Slab">Kelly Slab</option>
+											<option value="Pattaya">Pattaya</option>
+											<option value="Underdog">Underdog</option>
+										</select>
+									</div>
+								</div>
+							</div>
+							
+							
+							<div class="form-group">
+								<b>Размер и цвет текста</b><br>
+								<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.textSize">
+								<color-picker options="options" ng-model="w.textColor" style="display: inline-block; float: left; width: 50%;"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.textBorder">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.textBorderColor"></color-picker>
+							</div>
+
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.textBold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.textCaps"> Текст КАПСОМ</label>
+							</div>
+
+
+
+							<div ng-if="w.viewType == 'slider' && w.sliderShowSecondText">
+								<hr style="margin: 14px 0; border-color: #ccc;">
+								<h4 style="color: #059ecc;"><b>Настройки второй строки:</b></h4>
+
+								<div class="form-horizontal">
+
+									<div class="form-group">
+										<div class="col-xs-3 control-label">Шрифт</div>
+										<div class="col-xs-9">
+											<select class="form-control" ng-model="w.textSecondFont">
+												<option value="Arial">Arial</option>
+												<option value="Press Start 2P">Press Start 2P</option>
+												<option value="Roboto">Roboto</option>
+												<option value="Roboto Slab">Roboto Slab</option>
+												<option value="Lora">Lora</option>
+												<option value="Ubuntu">Ubuntu</option>
+												<option value="Lobster">Lobster</option>
+												<option value="Exo 2">Exo 2</option>
+												<option value="El Messiri">El Messiri</option>
+												<option value="Comfortaa">Comfortaa</option>
+												<option value="Old Standard TT">Old Standard TT</option>
+												<option value="Russo One">Russo One</option>
+												<option value="Poiret One">Poiret One</option>
+												<option value="Philosopher">Philosopher</option>
+												<option value="Bad Script">Bad Script</option>
+												<option value="Marck Script">Marck Script</option>
+												<option value="Alice">Alice</option>
+												<option value="Neucha">Neucha</option>
+												<option value="Ruslan Display">Ruslan Display</option>
+												<option value="Marmelad">Marmelad</option>
+												<option value="Pangolin">Pangolin</option>
+												<option value="Kelly Slab">Kelly Slab</option>
+												<option value="Pattaya">Pattaya</option>
+												<option value="Underdog">Underdog</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<b>Размер и цвет текста</b><br>
+									<input type="number" class="form-control" style="width: 40%; display: inline-block; float: left; margin-right: 10px;" ng-model="w.textSecondSize">
+									<color-picker options="options" ng-model="w.textSecondColor" style="display: inline-block; float: left; width: 50%;"></color-picker>
+								</div>
+
+								<div class="form-group">
+									<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+									<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.textSecondBorder">
+									<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.textSecondBorderColor"></color-picker>
+								</div>
+
+								
+								<div class="form-group">
+									<label><input type="checkbox" ng-model="w.textSecondBold"> Жирный текст</label><br>
+									<label><input type="checkbox" ng-model="w.textSecondCaps"> Текст КАПСОМ</label>
+								</div>
+							</div>
+
+						</div> 
+
+						
+
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-top: 20px;" >
+								<p>
+									Данный виджет предназначен для интеграции с виджетом "Внутреняя статистика" на donationalerts.ru. С его помощью вы можете выводить на обложку 
+									следующие типы данных: последние сообщения, самые дорогие сообщения, самые крупные отправители сообщений.
+								</p>
+
+								<p>
+									<b>Внимание!</b> В визуальном редакторе вы видите виджет с тестовыми данными, для просмотра конечного результата, используйте функцию "предпросмотра".
+								</p>
+							</div>
+						</div>
+
+						
+					</div>
+				</div><!-- end donationalerts_instream_stats -->
+
+
+
+			<div class="w_opt" ng-if="w.name == 'image_to_link'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Размер картинки</div>
+								<div class="col-xs-6">
+									<input type="number" class="form-control" ng-model="w.width">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-12 control-label">Ссылка на картинку</div>
+								<div class="col-xs-12">
+									<input type="text" class="form-control" ng-model="w.url">
+								</div>
+								<div class="col-xs-12" style="padding-top: 10px;">
+									<button class="btn btn-sm btn-primary" ng-click="show_all_standart_images(w)">Выбрать из стандартных</button>
+								</div>
+							</div>
+
+
+
+						</div><!-- end col-xs-7 form-horizontal -->
+
+
+						 <div class="col-xs-5">
+							<div class="alert alert-info">
+								<p><b>Внимание!</b></p>
+								<p>Не добавляйте слишком крупные изображения, т.к. их "вес" на прямую влияет на скорость генерации вашей обложки!</p>
+							</div>
+						</div> 
+
+						
+					</div>
+				</div><!-- end text -->
+
+
+			<div class="w_opt" ng-if="w.name == 'text'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-3 control-label">Текст</div>
+								<div class="col-xs-9">
+									<div ng-class="{'input-group': i > 0}" style="margin-bottom: 10px;" ng-repeat="(i, val) in w.text">
+										<input type="text" class="form-control" ng-model="w.text[i].val">
+										<div class="input-group-btn" ng-if="i > 0">
+											<button class="btn btn-danger" ng-click="w.text.splice(i, 1)"><i class="fa fa-fw fa-close"></i></button>
+										</div>
+									</div>
+									<button class="btn btn-success" ng-click="w.text.push({val: ''})">Добавить строку</button>
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<!--input type="text" class="form-control" style="width: 50%" ng-model="w.color"-->
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+					</div>
+				</div><!-- end text -->
+
+
+				<div class="w_opt" ng-if="w.name == 'random_text'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-12 control-label">Шаблон текста</div>
+								<div class="col-xs-12">
+									<textarea ng-model="w.text" class="form-control" cols="30" rows="10"></textarea>
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<!--input type="text" class="form-control" style="width: 50%" ng-model="w.color"-->
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-xs-12">
+						<div class="alert alert-info" style="font-size: 14px; margin-top: 20px;" >
+							<p>
+								<b>Поддерживаемые шаблоны и директивы</b>
+								<ul>
+									<li>{текст 1|текст 2|текст 3} - перебор вариантов</li>
+									<li>[текст 1|текст 2|текст 3] - перестановки</li>
+									<li>[+разделитель+текст 1|текст 2|текст 3] - перестановки с разделителем</li>
+									<li>\{ \} \| \[ \] \+ \\ - экранизация спецсимволов</li>
+									<li>Поддерживается вложенность команд</li>
+									<li>--br - перенос текста</li>
+								</ul>
+
+								<p><b>В редакторе не работает рандомизация!</b> Чтобы посмотреть результат используйте ккнопку "предпросмотр".</p>
+							</p>
+						</div>
+					</div>
+				</div><!-- end random_text -->
+
+
+				<div class="w_opt" ng-if="w.name == 'text_link'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Ссылка на страницу с текстом</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.pageUrl">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Текст до ваших данных</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.textBefore">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Текст после ваших данных</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.textAfter">
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер и цвет шрифта</b><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.font_size">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.color"></color-picker>
+							</div>
+							
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<!-- <div class="btn-group">
+									<button class="btn btn-default" data-toggle="tooltip" data-original-title="Жирный текст" ng-class="{'active': w.font_bold}" ng-click="w.font_bold ? w.font_bold = false : w.font_bold = true;"><i class="fa fa-tw fa-bold"></i></button>
+									<button class="btn btn-default" data-toggle="tooltip" data-original-title="Текст курсивом" ng-class="{'active': w.font_italic}" ng-click="w.font_italic ? w.font_italic = false : w.font_italic = true;"><i class="fa fa-tw fa-italic"></i></button>
+									<button class="btn btn-default" data-toggle="tooltip" data-original-title="Текст КАПСОМ" ng-class="{'active': w.caps}" ng-click="w.caps ? w.caps = false : w.caps = true;"><i class="fa fa-tw fa-text-height"></i></button>
+								</div> -->
+
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-top: 20px;" >
+								<p>
+									Чтобы выводить текст с вашего сайта, вставьте ссылку которая возвращает только текст (без XML, JSON, HTML тд.). Максимальная длинна 50 символов.
+								</p>
+								<p>
+									Если ответа от сервера не поступило, то виджет на обложку не добавляется!
+								</p>
+							</div>
+						</div>
+					</div>
+				</div><!-- end text_link -->
+
+
+
+
+				<div class="w_opt" ng-if="w.name == 'rss'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-12 control-label">
+									Ссылка на RSS канал<br>
+									<span style="color: #8e8e8e; font-size: 11px;">Каталог каналов от Яндекса: <a href="https://news.yandex.ru/export.html" target="_blank">https://news.yandex.ru/export.html</a></span>
+								</div>
+								<div class="col-xs-12">
+									<input type="text" class="form-control" ng-model="w.rssAdress">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Количество новостей</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.count">
+										<option value="1">Одна новость</option>
+										<option value="2">Две новости</option>
+										<option value="3">Три новости</option>
+										<option value="4">Четыре новости</option>
+										<option value="5">Пять новостей</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Количество символов</div>
+								<div class="col-xs-6">
+									<input type="number" class="form-control" ng-model="w.symbolLimit">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Отступы вниз от новостей</div>
+								<div class="col-xs-6">
+									<input type="number" class="form-control" ng-model="w.padding">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-12 control-label">
+									<span ng-click="w.showTime ? w.showTime=false : w.showTime=true">
+										<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+											<i class="fa fa-tw fa-toggle-off" ng-if="!w.showTime"></i>
+											<i class="fa fa-tw fa-toggle-on" ng-if="w.showTime" style="color: #4CAF50;" ng-cloak></i>
+										</span> 
+										Показывать время
+									</span>
+								</div>
+							</div>
+
+							<hr style="margin: 10px 0;">
+
+							<div class="form-group">
+								<div class="col-xs-12 control-label">Ключевые слова (через запятую)</div>
+								<div class="col-xs-12">
+									<textarea type="text" class="form-control" style="height: 60px;" ng-model="w.keys"></textarea>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<div class="col-xs-12 control-label">Стоп слова (через запятую)</div>
+								<div class="col-xs-12">
+									<input type="text" class="form-control" ng-model="w.stopWords">
+								</div>
+							</div> 
+						</div><!-- end col-xs-7 form-horizontal -->
+
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<!--input type="text" class="form-control" style="width: 50%" ng-model="w.color"-->
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-bottom: 20px;">
+								<p>
+									С помощью данного виджета вы можете импортитовать новости с любых сайтов из их RSS-каналов.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div><!-- end rss -->
+				
+
+
+				<div class="w_opt" ng-if="w.name == 'members_count'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Разделитель между тысячами</div>
+								<div class="col-xs-6">
+								<select class="form-control" ng-model="w.delimiter">
+									<option value="0">Нету</option>
+									<option value="1">Пробел</option>
+									<option value="2">Точка</option>
+									<option value="3">Запятая</option>
+								</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Текст до кол-ва участников</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.textBefore">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Текст после кол-ва участников</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.textAfter">
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер и цвет шрифта</b><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.font_size">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.color"></color-picker>
+							</div>
+							
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<!-- <div class="btn-group">
+									<button class="btn btn-default" data-toggle="tooltip" data-original-title="Жирный текст" ng-class="{'active': w.font_bold}" ng-click="w.font_bold ? w.font_bold = false : w.font_bold = true;"><i class="fa fa-tw fa-bold"></i></button>
+									<button class="btn btn-default" data-toggle="tooltip" data-original-title="Текст курсивом" ng-class="{'active': w.font_italic}" ng-click="w.font_italic ? w.font_italic = false : w.font_italic = true;"><i class="fa fa-tw fa-italic"></i></button>
+									<button class="btn btn-default" data-toggle="tooltip" data-original-title="Текст КАПСОМ" ng-class="{'active': w.caps}" ng-click="w.caps ? w.caps = false : w.caps = true;"><i class="fa fa-tw fa-text-height"></i></button>
+								</div> -->
+
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-top: 20px;" >
+								<p>
+									Виджет позволяет вывести текущее кол-во подписчиков в сообществе.
+								</p>
+							</div>
+						</div>
+					</div>
+				</div><!-- end members_count -->
+
+
+
+
+
+				<div class="w_opt" ng-if="w.name == 'rates'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Выберите валютную пару</div>
+								<div class="col-xs-3">
+									<select class="form-control" ng-model="w.secondCurrency">
+										<option value="USD">USD</option>
+										<option value="EUR">EUR</option>
+										<option value="RUB">RUB</option>
+										<option value="UAH">UAH</option>
+										<option value="BYN">BYN</option>
+										<option value="THB">THB</option>
+										<option value="BTC">BTC</option>
+										<option value="LTC">LTC</option>
+										<option value="ETH">ETH</option>
+									</select>
+								</div>
+								<div class="col-xs-3" style="position: relative;">
+									<span style="position: absolute; top: 8px; left: -7px; font-weight: bold;">за</span>
+									<select class="form-control" ng-model="w.firstCurrency">
+										<option value="USD">USD</option>
+										<option value="EUR">EUR</option>
+										<option value="RUB">RUB</option>
+										<option value="UAH">UAH</option>
+										<option value="BYN">BYN</option>
+										<option value="THB">THB</option>
+										<option value="BTC">BTC</option>
+										<option value="LTC">LTC</option>
+										<option value="ETH">ETH</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">
+									Префикс перед курсом
+								</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.perfix">
+										<option value="none">Нету</option>
+										<option value="icon">Иконка</option>
+										<option value="text_code">Код валюты</option>
+									</select>
+									<p ng-show="w.perfix == 'icon' && (w.firstCurrency != 'RUB' && w.firstCurrency != 'USD' && w.firstCurrency != 'EUR' && w.firstCurrency != 'BTC')">
+										Не у всех валют есть иконка.
+									</p>
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<!--input type="text" class="form-control" style="width: 50%" ng-model="w.color"-->
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+					</div>
+				</div><!-- end text -->
+
+
+
+
+
+
+
+
+				<div class="w_opt" ng-if="w.name == 'time'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Часовой пояс</div>
+								<div class="col-xs-6">
+									<!--<input type="text" class="form-control" ng-model="w.timezone">-->
+									<select class="form-control" ng-model="w.timezone">
+										<option value="America/New_York">{{timeZones['America/New_York']}} – Нью-Йорк</option>
+										<option value="Europe/Kaliningrad">{{timeZones['Europe/Kaliningrad']}} – Калининград</option>
+										<option value="Europe/Kiev">{{timeZones['Europe/Kiev']}} – Киев</option>
+										<option value="Europe/Moscow">{{timeZones['Europe/Moscow']}} – Москва</option>
+										<option value="Europe/Samara">{{timeZones['Europe/Samara']}} – Самара</option>
+										<option value="Asia/Yekaterinburg">{{timeZones['Asia/Yekaterinburg']}} – Екатеринбург</option>
+										<option value="Asia/Omsk">{{timeZones['Asia/Omsk']}} – Омск</option>
+										<option value="Asia/Novosibirsk">{{timeZones['Asia/Novosibirsk']}} – Новосибирск</option>
+										<option value="Asia/Krasnoyarsk">{{timeZones['Asia/Krasnoyarsk']}} – Красноярск</option>
+										<option value="Asia/Irkutsk">{{timeZones['Asia/Irkutsk']}} – Иркутск</option>
+										<option value="Asia/Yakutsk">{{timeZones['Asia/Yakutsk']}} – Якутск</option>
+										<option value="Asia/Vladivostok">{{timeZones['Asia/Vladivostok']}} – Владивосток</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">
+									Формат даты <a href="/cabinet/faq/editor/#q1" target="_blank"><i class="fa fa-tw fa-question-circle"></i></a>
+									<!-- https://github.com/jacwright/date.format -->
+								</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.dateFormat">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Текст в начале</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.text">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Текст в конце</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.textEnd">
+								</div>
+							</div>
+
+							<!--div class="form-group">
+								<div class="col-xs-6 control-label">Формат</div>
+								<div class="col-xs-6">
+									<select class="form-control">
+										<option value="0">1</option>
+										<option value="1">2</option>
+										<option value="2">3</option>
+									</select>
+								</div>
+							</div-->
+						</div><!-- end col-xs-7 form-horizontal -->
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<!--input type="text" class="form-control" style="width: 50%" ng-model="w.color"-->
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+					</div>
+				</div><!-- end time -->
+
+
+
+				<div class="w_opt" ng-if="w.name == 'timer'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Часовой пояс</div>
+								<div class="col-xs-6">
+									<!--<input type="text" class="form-control" ng-model="w.timezone">-->
+									<select class="form-control" ng-model="w.timezone">
+										<option value="America/New_York">{{timeZones['America/New_York']}} – Нью-Йорк</option>
+										<option value="Europe/Kaliningrad">{{timeZones['Europe/Kaliningrad']}} – Калининград</option>
+										<option value="Europe/Kiev">{{timeZones['Europe/Kiev']}} – Киев</option>
+										<option value="Europe/Moscow">{{timeZones['Europe/Moscow']}} – Москва</option>
+										<option value="Europe/Samara">{{timeZones['Europe/Samara']}} – Самара</option>
+										<option value="Asia/Yekaterinburg">{{timeZones['Asia/Yekaterinburg']}} – Екатеринбург</option>
+										<option value="Asia/Omsk">{{timeZones['Asia/Omsk']}} – Омск</option>
+										<option value="Asia/Novosibirsk">{{timeZones['Asia/Novosibirsk']}} – Новосибирск</option>
+										<option value="Asia/Krasnoyarsk">{{timeZones['Asia/Krasnoyarsk']}} – Красноярск</option>
+										<option value="Asia/Irkutsk">{{timeZones['Asia/Irkutsk']}} – Иркутск</option>
+										<option value="Asia/Yakutsk">{{timeZones['Asia/Yakutsk']}} – Якутск</option>
+										<option value="Asia/Vladivostok">{{timeZones['Asia/Vladivostok']}} – Владивосток</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Дата к которой идёт отсчёт</div>
+								<div class="col-xs-6">
+									<button class="btn btn-default" moment-picker="w.toDate" format="DD-MM-YYYY HH:mm" set-on-select="true" locale="ru">
+										<i class="fa fa-tw fa-calendar"></i> {{ w.toDate || 'Click here to select a date' }}
+									</button>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Стиль таймера</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.style">
+										<option value="1">Горизонтальные блоки</option>
+										<option value="2">Вертикальные блоки</option>
+										<option value="3">Строкой</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Отступы от чисел</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.paddingX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.paddingY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Размер шрифта обозначений</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textSize">
+								</div>
+							</div>
+
+							<div class="control-label">
+								<span ng-click="w.hideZero ? w.hideZero=false : w.hideZero=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.hideZero"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.hideZero" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Не добавлять нули к цифрам меньше 10
+								</span>
+							</div>
+
+
+						</div><!-- end col-xs-7 form-horizontal -->
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<!--<option value="Open Sans Condensed">Open Sans Condensed</option>-->
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+					</div>
+				</div><!-- end timer -->
+
+				
+				
+
+				<div class="w_opt" ng-if="w.name == 'weather'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label"><b>Город</b> <small>(<a href="http://openweathermap.org/find?q={{w.city}}" target="_blank">проверить наличие в базе</a>)</small></div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.city">
+								</div>
+								<div class="col-xs-12">
+									<p>
+										<span style="color: #d33;"><i class="fa fa-warning"></i> Для большей точности используйте название города на английском, а также через завятую указывайте регион, "RU" для России! Это существенно увеличивает скорость генерации обложки.</span><br>
+										Для перевода рекомендуем использовать: <a href="https://translate.yandex.by/?lang=ru-en&text={{w.city}}" target="_blank">Яндекс.Переводчик</a>
+									</p>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Текст перед погодой</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.before_text">
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 col-xs-offset-6">
+									<label><input type="checkbox" ng-model="w.only_temp"> показывать только температуру</label><br>
+									<label><input type="checkbox" ng-model="w.show_c"> добавлять символ "C" (целисии)</label>
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<!--<option value="Open Sans Condensed">Open Sans Condensed</option>-->
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<!--input type="text" class="form-control" style="width: 50%" ng-model="w.color"-->
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.textAlign = 'left'" ng-class="{'active': w.textAlign == 'left'}"><i class="fa fa-tw fa-align-left"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'center'" ng-class="{'active': w.textAlign == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.textAlign = 'right'" ng-class="{'active': w.textAlign == 'right'}"><i class="fa fa-tw fa-align-right"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+					</div>
+				</div><!-- end weather -->
+
+
+
+				<div class="w_opt" ng-if="w.name == 'weather_icon'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label"><b>Город</b> <small>(<a href="http://openweathermap.org/find?q={{w.city}}" target="_blank">проверить наличие в базе</a>)</small></div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.city">
+								</div>
+								<div class="col-xs-12">
+									<p>
+										<span style="color: #d33;"><i class="fa fa-warning"></i> Для большей точности используйте название города на английском, а также через завятую указывайте регион, "RU" для России! Это существенно увеличивает скорость генерации обложки.</span><br>
+										Для перевода рекомендуем использовать: <a href="https://translate.yandex.by/?lang=ru-en&text={{w.city}}" target="_blank">Яндекс.Переводчик</a>
+									</p>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-12 control-label" ng-click="w.show_c ? w.show_c=false : w.show_c=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_c"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.show_c" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Добавлять символ "C" (целисии)
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-5 control-label" ng-click="w.iconShow ? w.iconShow=false : w.iconShow=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.iconShow"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.iconShow" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Иконка
+								</div>
+								<div class="col-xs-7" ng-if="w.iconShow">
+									
+							
+									<div class="form-group">
+										<div class="col-xs-12">
+											<select class="form-control" ng-model="w.iconPack">
+												<option value="1">Шаблон 1</option>
+												<option value="2">Шаблон 2</option>
+												<option value="3">Шаблон 3</option>
+												<option value="4">Шаблон 4</option>
+												<option value="5">Шаблон 5</option>
+											</select>
+										</div>
+										<div class="col-xs-12 weather_icons" ng-if="w.iconPack">
+											<img ng-src="/img/weather_icons/{{w.iconPack}}/01d.png">
+											<img ng-src="/img/weather_icons/{{w.iconPack}}/02d.png">
+											<img ng-src="/img/weather_icons/{{w.iconPack}}/03d.png">
+											<img ng-src="/img/weather_icons/{{w.iconPack}}/09d.png">
+											<img ng-src="/img/weather_icons/{{w.iconPack}}/10d.png">
+											<img ng-src="/img/weather_icons/{{w.iconPack}}/11d.png">
+											<img ng-src="/img/weather_icons/{{w.iconPack}}/13d.png">
+										</div>
+									</div>
+
+
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconPosX"> 
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconPosY">
+									<em style="line-height: 34px;">отступы</em>
+									<div class="clearfix" style="margin-bottom: 4px;"></div>
+
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconSize"> 
+									<em style="line-height: 34px;">Размер иконки</em> 
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-5 control-label" ng-click="w.textShow ? w.textShow=false : w.textShow=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.textShow"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.textShow" style="color: #4CAF50;" ng-cloak></i>
+									</span>
+
+									Описание погоды
+								</div>
+								<div class="col-xs-7" ng-if="w.textShow">
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.textPosX"> 
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.textPosY">
+									<em style="line-height: 34px;">отступы</em>
+
+									<div class="clearfix" style="margin-bottom: 4px;"></div>
+
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.textSize"> 
+									<em style="line-height: 34px;">Размер шрифта</em> 
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option style="font-family: 'Press Start 2P';" value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+					</div>
+				</div><!-- end weather_icon -->
+
+
+
+				<div class="w_opt" ng-if="w.name == 'probki'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">
+									<b>Город</b> 
+									<button class="btn btn-xs btn-success" ng-click="searchCity(w)">Изменить город</button>
+								</div>
+								<div class="col-xs-6" style="padding-top: 6px;">
+									<b style="font-size: 15px;">{{w.city}}</b>
+									<!-- <input type="text" class="form-control" ng-model="w.city"> -->
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-12">
+									<p>
+										Не для всех городов можно получить данные о пробках. Поэтому обязательно проверьте наличие этих данный перед сохранением обложки.
+										<br><button class="btn btn-xs btn-primary" ng-click="checkTrafficData(w.cityId)" style="margin-top: 5px;">Проверить наличие данных</button> 
+									</p>
+								</div>
+							</div>
+
+
+							<hr>
+
+
+							<div class="form-group">
+								<div class="col-xs-4 control-label" ng-click="w.iconShow ? w.iconShow=false : w.iconShow=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.iconShow"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.iconShow" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Иконка
+								</div>
+								<div class="col-xs-8" ng-if="w.iconShow">
+									
+									<div class="form-group">
+										<div class="col-xs-6">
+											<select class="form-control" ng-model="w.iconPack">
+												<option value="1">Шаблон 1</option>
+												<option value="2">Шаблон 2</option>
+											</select>
+										</div>
+										<div class="col-xs-6 weather_icons text-right" ng-if="w.iconPack">
+											<img style="width: 30px;" ng-src="/img/probki_icons/{{w.iconPack}}/green.png">
+											<img style="width: 30px;" ng-src="/img/probki_icons/{{w.iconPack}}/yellow.png">
+											<img style="width: 30px;" ng-src="/img/probki_icons/{{w.iconPack}}/red.png">
+										</div>
+									</div>
+
+
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconPosX"> 
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconPosY">
+									<em style="line-height: 34px;">отступы</em>
+									<div class="clearfix" style="margin-bottom: 4px;"></div>
+
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconSize"> 
+									<em style="line-height: 34px;">Размер иконки</em> 
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-4 control-label" ng-click="w.textShow ? w.textShow=false : w.textShow=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.textShow"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.textShow" style="color: #4CAF50;" ng-cloak></i>
+									</span>
+
+									Описание
+								</div>
+								<div class="col-xs-8" ng-if="w.textShow">
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.textPosX"> 
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.textPosY">
+									<em style="line-height: 34px;">отступы</em>
+
+									<div class="clearfix" style="margin-bottom: 4px;"></div>
+
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.textSize"> 
+									<em style="line-height: 34px;">Размер шрифта</em> 
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-12 control-label" ng-click="w.show_bale_text ? w.show_bale_text=false : w.show_bale_text=true">
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.show_bale_text"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.show_bale_text" style="color: #4CAF50;" ng-cloak></i>
+									</span> 
+									Добавлять текс "баллов"
+								</div>
+							</div>
+						</div><!-- end col-xs-7 form-horizontal -->
+
+
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<!--<option value="Open Sans Condensed">Open Sans Condensed</option>-->
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+					</div>
+
+
+				</div><!-- end probki -->
+
+
+
+				<div class="w_opt" ng-if="w.name == 'last_sub'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Позиция подписчика</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.user_pos">
+										<option value="0">1</option>
+										<option value="1">2</option>
+										<option value="2">3</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Размер фото подписчика</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.avatarW">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Скругление углов аватарки</div>
+								<div class="col-xs-6">
+									<input type="range" min="0" max="50" step="5" ng-model="w.avatarBorderRadius">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Обводка аватарки</div>
+								<div class="col-xs-6">
+									<input type="number" class="form-control" style="width: 38%; display: inline-block;" ng-model="w.avatarBorder">
+									<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.avatarBorderColor"></color-picker>
+								</div>
+							</div>
+
+
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Формат имени подписчика</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.nameFormat">
+										<option value="1">Имя и фамилия, 2 строки</option>
+										<option value="2">Имя и фамилия, одна строка</option>
+										<option value="3">Только имя</option>
+										<option value="4">Не показывать имя</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Отступ имени от аватара X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textPosX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textPosY">
+								</div>
+							</div>
+
+
+						</div><!-- end col-xs-8 form-horizontal -->
+
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<!--<option value="Open Sans Condensed">Open Sans Condensed</option>-->
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+							
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.namePos = 'left'" ng-class="{'active': w.namePos == 'left'}"><i class="fa fa-tw fa-align-right"></i></button>
+									<button class="btn btn-default" ng-click="w.namePos = 'center'" ng-class="{'active': w.namePos == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.namePos = 'right'" ng-class="{'active': w.namePos == 'right'}"><i class="fa fa-tw fa-align-left"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-bottom: 20px;">
+								<p>
+									Выводит одного из последних подписчиков сообщества. Вы можете показывать одновременно до 3-х последних подписчиков, 
+									просто добавив несколько виджетов и указав "позицию подписчика".
+								</p>
+							</div>
+						</div>
+						
+
+					</div>
+				</div><!-- end last_sub -->
+
+
+				<div class="w_opt" ng-if="w.name == 'show_user_to_link'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">ID пользователя</div>
+								<div class="col-xs-6">
+									<input type="text" class="form-control" ng-model="w.link" placeholder="123456">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Размер фото подписчика</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.avatarW">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Скругление углов аватарки</div>
+								<div class="col-xs-6">
+									<input type="range" min="0" max="50" step="5" ng-model="w.avatarBorderRadius">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Обводка аватарки</div>
+								<div class="col-xs-6">
+									<input type="number" class="form-control" style="width: 38%; display: inline-block;" ng-model="w.avatarBorder">
+									<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.avatarBorderColor"></color-picker>
+								</div>
+							</div>
+
+
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Формат имени подписчика</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.nameFormat">
+										<option value="1">Имя и фамилия, 2 строки</option>
+										<option value="2">Имя и фамилия, одна строка</option>
+										<option value="3">Только имя</option>
+										<option value="4">Не показывать имя</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Отступ имени от аватара X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textPosX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textPosY">
+								</div>
+							</div>
+
+
+						</div><!-- end col-xs-8 form-horizontal -->
+
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<!--<option value="Open Sans Condensed">Open Sans Condensed</option>-->
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+							
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.namePos = 'left'" ng-class="{'active': w.namePos == 'left'}"><i class="fa fa-tw fa-align-right"></i></button>
+									<button class="btn btn-default" ng-click="w.namePos = 'center'" ng-class="{'active': w.namePos == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.namePos = 'right'" ng-class="{'active': w.namePos == 'right'}"><i class="fa fa-tw fa-align-left"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-bottom: 20px;">
+								<p>
+									Выводит пользователя по его ID. Возвращаются только общедоступные данные.
+								</p>
+							</div>
+						</div>
+						
+
+					</div>
+				</div><!-- end show_user_to_link -->
+
+
+
+
+				<div class="w_opt" ng-if="w.name == 'birthday'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Позиция именинника</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.user_pos">
+										<option value="0">1</option>
+										<option value="1">2</option>
+										<option value="2">3</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Размер фото подписчика</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.avatarW">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Скругление углов аватарки</div>
+								<div class="col-xs-6">
+									<input type="range" min="0" max="50" step="5" ng-model="w.avatarBorderRadius">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Обводка аватарки</div>
+								<div class="col-xs-6">
+									<input type="number" class="form-control" style="width: 38%; display: inline-block;" ng-model="w.avatarBorder">
+									<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.avatarBorderColor"></color-picker>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Формат имени подписчика</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.nameFormat">
+										<option value="1">Имя и фамилия, 2 строки</option>
+										<option value="2">Имя и фамилия, одна строка</option>
+										<option value="3">Только имя</option>
+										<option value="4">Не показывать имя</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Отступ имени от аватара X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textPosX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textPosY">
+								</div>
+							</div>
+
+
+						</div><!-- end col-xs-8 form-horizontal -->
+
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<!--<option value="Open Sans Condensed">Open Sans Condensed</option>-->
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+							
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.namePos = 'left'" ng-class="{'active': w.namePos == 'left'}"><i class="fa fa-tw fa-align-right"></i></button>
+									<button class="btn btn-default" ng-click="w.namePos = 'center'" ng-class="{'active': w.namePos == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.namePos = 'right'" ng-class="{'active': w.namePos == 'right'}"><i class="fa fa-tw fa-align-left"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-bottom: 20px;">
+								<p>
+									Выводит одного из подписчиков сообщества у которого сегодня день рождения. Вы можете показывать одновременно до 3-х именинников, 
+									просто добавив несколько виджетов и указав "позицию именинника".
+								</p>
+
+								<p>
+									Именинники показываются в случайном порядке.
+								</p>
+							</div>
+						</div>
+						
+
+					</div>
+				</div><!-- end birthday -->
+
+
+
+
+
+				<div class="w_opt" ng-if="w.name == 'best_comment' || w.name == 'best_like' || w.name == 'best_share'">
+					<div class="row">
+						<div class="col-xs-7 form-horizontal">
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Позиция в ТОП'е</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.user_pos">
+										<option value="0">1</option>
+										<option value="1">2</option>
+										<option value="2">3</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Координаты X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.posY">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Размер фото подписчика</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.avatarW">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Скругление углов аватарки</div>
+								<div class="col-xs-6">
+									<input type="range" min="0" max="50" step="5" ng-model="w.avatarBorderRadius">
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Обводка аватарки</div>
+								<div class="col-xs-6">
+									<input type="number" class="form-control" style="width: 38%; display: inline-block;" ng-model="w.avatarBorder">
+									<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.avatarBorderColor"></color-picker>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Формат имени подписчика</div>
+								<div class="col-xs-6">
+									<select class="form-control" ng-model="w.nameFormat">
+										<option value="1">Имя и фамилия, 2 строки</option>
+										<option value="2">Имя и фамилия, одна строка</option>
+										<option value="3">Только имя</option>
+										<option value="4">Не показывать имя</option>
+									</select>
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-6 control-label">Отступ имени от аватара X и Y</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textPosX">
+								</div>
+								<div class="col-xs-3">
+									<input type="number" class="form-control" ng-model="w.textPosY">
+								</div>
+							</div>
+
+							<hr>
+
+
+							<div class="form-group">
+								<div class="col-xs-3 control-label" ng-click="w.iconShow ? w.iconShow=false : w.iconShow=true">
+									Иконка 
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.iconShow"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.iconShow" style="color: #4CAF50;" ng-cloak></i>
+									</span>
+								</div>
+								<div class="col-xs-9" ng-if="w.iconShow">
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconPosX"> 
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconPosY">
+									<em style="line-height: 34px;">X и Y</em>
+
+									<div class="clearfix" style="margin-bottom: 4px;"></div>
+
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.iconSize"> 
+									<color-picker style="vertical-align: top; display: inline-block; width: 115px;" options="options" ng-model="w.iconColor"></color-picker>
+									<em style="line-height: 34px;">Размер и цвет</em> 
+								</div>
+							</div>
+
+
+							<div class="form-group">
+								<div class="col-xs-3 control-label" ng-click="w.countShow ? w.countShow=false : w.countShow=true">
+									Счётчик 
+									<span style="font-size: 18px; line-height: initial; vertical-align: middle;">
+										<i class="fa fa-tw fa-toggle-off" ng-if="!w.countShow"></i>
+										<i class="fa fa-tw fa-toggle-on" ng-if="w.countShow" style="color: #4CAF50;" ng-cloak></i>
+									</span>
+								</div>
+								<div class="col-xs-9" ng-if="w.countShow">
+									<input style="width: 70px; vertical-align: top; display: inline-block; margin-right: 10px;" type="number" class="form-control" ng-model="w.countPosX">
+									<input style="width: 70px; vertical-align: top; display: inline-block; margin-right: 10px;" type="number" class="form-control" ng-model="w.countPosY">
+									<em style="line-height: 34px;">X и Y</em>
+
+									<div class="clearfix" style="margin-bottom: 4px;"></div>
+
+									<input style="width: 65px; vertical-align: top; display: inline-block; margin-right: 5px;" type="number" class="form-control" ng-model="w.countSize"> 
+									<color-picker style="vertical-align: top; display: inline-block; width: 115px;" options="options" ng-model="w.countColor"></color-picker>
+									<em style="line-height: 34px;">Размер и цвет</em>
+								</div>
+							</div>
+
+
+						</div><!-- end col-xs-8 form-horizontal -->
+
+
+						<div class="col-xs-5">
+							<div class="form-group">
+								<b>Шрифт</b><br>
+								<select class="form-control" ng-model="w.font_family">
+									<option value="Arial">Arial</option>
+									<option value="Press Start 2P">Press Start 2P</option>
+									<option value="Roboto">Roboto</option>
+									<option value="Roboto Slab">Roboto Slab</option>
+									<!--<option value="Open Sans Condensed">Open Sans Condensed</option>-->
+									<option value="Lora">Lora</option>
+									<option value="Ubuntu">Ubuntu</option>
+									<option value="Lobster">Lobster</option>
+									<option value="Exo 2">Exo 2</option>
+									<option value="El Messiri">El Messiri</option>
+									<option value="Comfortaa">Comfortaa</option>
+									<option value="Old Standard TT">Old Standard TT</option>
+									<option value="Russo One">Russo One</option>
+									<option value="Poiret One">Poiret One</option>
+									<option value="Philosopher">Philosopher</option>
+									<option value="Bad Script">Bad Script</option>
+									<option value="Marck Script">Marck Script</option>
+									<option value="Alice">Alice</option>
+									<option value="Neucha">Neucha</option>
+									<option value="Ruslan Display">Ruslan Display</option>
+									<option value="Marmelad">Marmelad</option>
+									<option value="Pangolin">Pangolin</option>
+									<option value="Kelly Slab">Kelly Slab</option>
+									<option value="Pattaya">Pattaya</option>
+									<option value="Underdog">Underdog</option>
+								</select>
+							</div>
+							
+							<div class="form-group">
+								<b>Размер шрифта</b><br>
+								<input type="number" class="form-control" style="width: 50%" ng-model="w.font_size">
+							</div>
+							
+							<div class="form-group">
+								<b>Цвет текста</b><br>
+								<color-picker options="options" ng-model="w.color"></color-picker>
+							</div>
+							
+							<div class="form-group">
+								<b>Обводка текста (размер и цвет)</b> <i class="fa fa-info-circle" data-toggle="tooltip" data-original-title="Обводка текста в облости предпросмотра статичная"></i><br>
+								<input type="number" class="form-control" style="width: 25%; display: inline-block;" ng-model="w.border">
+								<color-picker style="vertical-align: top; margin-left: 10px; display: inline-block; width: 45%;" options="options" ng-model="w.borderColor"></color-picker>
+							</div>
+
+							<div class="form-group">
+								<b>Выравнивание текста</b><br>
+								<div class="btn-group">
+									<button class="btn btn-default" ng-click="w.namePos = 'left'" ng-class="{'active': w.namePos == 'left'}"><i class="fa fa-tw fa-align-right"></i></button>
+									<button class="btn btn-default" ng-click="w.namePos = 'center'" ng-class="{'active': w.namePos == 'center'}"><i class="fa fa-tw fa-align-center"></i></button>
+									<button class="btn btn-default" ng-click="w.namePos = 'right'" ng-class="{'active': w.namePos == 'right'}"><i class="fa fa-tw fa-align-left"></i></button>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label><input type="checkbox" ng-model="w.font_bold"> Жирный текст</label><br>
+								<label><input type="checkbox" ng-model="w.caps"> Текст КАПСОМ</label>
+							</div>
+						</div>
+
+
+						
+						<div class="col-xs-12">
+							<div class="alert alert-info" style="font-size: 14px; margin-top: 20px;" >
+								<p ng-if="w.name == 'best_comment'">
+									Выводит информацию о самых активных комментаторах. Вы можете показывать одновременно до 3-х активных комментаторов, 
+									просто добавив несколько виджетов и указав "позицию в ТОП'е".
+									<br>
+									Комментарии от имени группы не попадают в этот виджет. Комментарии загружаются с последних 25 постов в сообществе.
+								</p>
+								<p ng-if="w.name == 'best_like'">
+									Выводит информацию об пользователях поставивших больше всего лайков на посты. Вы можете показывать одновременно до 3-х активных "лайкеров", 
+									просто добавив несколько виджетов и указав "позицию в ТОП'е".
+									<br>
+									Вы сами не можете попасть в этот виджет. Лайки загружаются с последних 25 постов в сообществе.
+								</p>
+								<p ng-if="w.name == 'best_share'">
+									Выводит информацию об пользователях сделавших больше всего репостов. Вы можете показывать одновременно до 3-х активных "репостеров", 
+									просто добавив несколько виджетов и указав "позицию в ТОП'е".
+									<br>
+									Репосты загружаются с последних 25 постов в сообществе.
+								</p>
+							</div>
+						</div>
+						
+
+					</div>
+				</div><!-- end best_comment -->
+
+
+		</div>
+	</div>
+</div>
+
+
+<div class="panel panel-default">
+	<div class="panel-heading clearfix">
+		<b style="padding-top: 0px; display: inline-block; font-size: 15px;">Настройки публикации</b>
+	</div>
+	<div class="panel-body">
+		
+		<h4 style="font-size: 15px;"><b>Настройка частоты обновления</b></h4>
+		<div class="btn-group" style="margin-bottom: -1px;">
+			<button ng-click="cover_opt.resetType = 'cron'" ng-class="{'btn-info': cover_opt.resetType == 'cron'}" style="border-radius: 3px 0 0 0;" type="button" class="btn btn-default">Обновление по таймеру</button>
+			<button ng-click="cover_opt.resetType = 'callback'" ng-class="{'btn-info': cover_opt.resetType == 'callback'}" style="border-radius: 0 3px 0 0;" type="button" class="btn btn-default">Через Callback API</button>
+		</div>
+
+		<div class="panel panel-default">
+			<div class="panel-body" style="background-color: #f7f7f7; padding: 10px;">
+				<div class="alert alert-info" ng-if="cover_opt.resetType == 'cron'" style="margin-bottom: 10px;">
+					<b>Обложка будет автоматически обновляться через заданный промежуток времени.</b>
+					<!--<br>Мы рекоментуем установить "ключ доступа группы". Это избавит от проблемы с переставанием работы обложки при смене пароля Вконтакте. (<a href="https://youtu.be/QtXl320kTxc" target="_blank">инструкция по созданию ключа</a>)-->
+				</div>
+
+				<div class="alert alert-info" ng-if="cover_opt.resetType == 'callback'" style="margin-bottom: 10px;">
+					<b>Обложка будет автоматически обновляться после того как кто нибудь подпишется на новости вашей группы.</b><br>
+					Данный способ интеграции требует указания "ключа доступа группы" (<a href="https://youtu.be/QtXl320kTxc" target="_blank">инструкция по созданию ключа</a>)<br><br>
+					Если вы используете Callback API для других целей (например для бота), адрес Callback сервера будет перезаписан. Пожалуйста учитывайте это.
+				</div>
+
+				<div class="row">
+					<div class="col-xs-6" ng-if="cover_opt.resetType == 'cron'">
+						<div>
+							<b>Частота обновления:</b>
+							<select class="form-control" ng-model="cover_opt.interval" style="width: 180px; display: inline-block;">
+								<option value="1">Каждую минуту</option>
+								<option value="5">Каждые 5 минут</option>
+								<option value="15">Каждые 15 минут</option>
+								<option value="30">Каждые 30 минут</option>
+								<option value="60">Каждый час</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="col-xs-6" ng-if="cover_opt.resetType == 'callback'">
+						<button class="btn btn-primary" data-toggle="modal" data-target="#set_token">Установить ключ доступа группы</button> 
+						(<span ng-if="cover_opt.resetType == 'cron'">не </span>обязательно)
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+		<hr>
+		<h4 style="font-size: 15px;"><b>Настройка расписания обложки</b></h4>
+		<p>
+			Вы можете настроить расписание публикации данной обложки, указав дни и время когда её публиковать.<br>
+			К примеру вы можете создать две обложки для одной группы, настроив их расписание так чтобы одна показывалась днём, а вторая ночью.
+		</p>
+		<div class="row">
+			<div class="col-xs-6">
+				<b>Дни недели:</b>
+
+				<div class="row week_panel">
+					<div class="col-xs-4" ng-repeat="val in range(0, 6)">
+						<div class="day_panel" ng-click="cover_opt.schedule.days[val] ? cover_opt.schedule.days[val] = false : cover_opt.schedule.days[val] = true" ng-class="{'active': cover_opt.schedule.days[val]}">
+							{{week_days[val]}}
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-xs-6">
+				<b>Время (по МСК):</b> <span class="fl_r">сейчас {{timeZones['Europe/Moscow']}}</span>
+				<div class="row time_panels">
+					<div class="col-xs-2" ng-repeat="val in range(0, 23)">
+						<div class="time_panel" ng-click="cover_opt.schedule.time[val] ? cover_opt.schedule.time[val] = false : cover_opt.schedule.time[val] = true" ng-class="{'active': cover_opt.schedule.time[val]}">
+							{{show_time(val)}}
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		
+		<p>
+			<b>Пожалуйста будьте внимательны при настройке времени публикации у своих обложек.</b><br>
+			Если вы создали две обложки для одной группы, убедитесь что время их публикации не пересекается. Т.к. при пересечении времени будет работать только одна из обложек.
+		</p>
+	</div>
+</div>
+
+
+<div class="modal fade" id="preview_cover">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Предпросмотр обложки</h4>
+			</div>
+			<div class="modal-body text-center">
+				<p class="load_preview" style="font-size: 18px; padding: 20px 0;"><i class="fa fa-spinner fa-pulse fa-fw"></i> Генерация обложки</p>
+
+				<div class="show_preview" style="display: none;">
+					<div class="preview_cover_full"></div>
+					<b class="clearfix">Обложка в мобильной версии Вконтакте:</b>
+					<div class="preview_cover_phone"></div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" id="all_standart_images">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Стандартные изображения</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row img-100">
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/1.png" ng-click="editImageUrl('/img/img_to_url/crowns/1.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/2.png" ng-click="editImageUrl('/img/img_to_url/crowns/2.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/3.png" ng-click="editImageUrl('/img/img_to_url/crowns/3.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/4.png" ng-click="editImageUrl('/img/img_to_url/crowns/4.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/5.png" ng-click="editImageUrl('/img/img_to_url/crowns/5.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/6.png" ng-click="editImageUrl('/img/img_to_url/crowns/6.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/7.png" ng-click="editImageUrl('/img/img_to_url/crowns/7.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/8.png" ng-click="editImageUrl('/img/img_to_url/crowns/8.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/9.png" ng-click="editImageUrl('/img/img_to_url/crowns/9.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/10.png" ng-click="editImageUrl('/img/img_to_url/crowns/10.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/11.png" ng-click="editImageUrl('/img/img_to_url/crowns/11.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/12.png" ng-click="editImageUrl('/img/img_to_url/crowns/12.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/13.png" ng-click="editImageUrl('/img/img_to_url/crowns/13.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/14.png" ng-click="editImageUrl('/img/img_to_url/crowns/14.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/crowns/15.png" ng-click="editImageUrl('/img/img_to_url/crowns/15.png')"></div>
+
+					<div class="col-xs-12"><hr></div>
+
+					<div class="col-xs-2"><img src="/img/img_to_url/other/1.png" ng-click="editImageUrl('/img/img_to_url/other/1.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/2.png" ng-click="editImageUrl('/img/img_to_url/other/2.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/3.png" ng-click="editImageUrl('/img/img_to_url/other/3.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/4.png" ng-click="editImageUrl('/img/img_to_url/other/4.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/5.png" ng-click="editImageUrl('/img/img_to_url/other/5.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/6.png" ng-click="editImageUrl('/img/img_to_url/other/6.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/7.png" ng-click="editImageUrl('/img/img_to_url/other/7.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/8.png" ng-click="editImageUrl('/img/img_to_url/other/8.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/9.png" ng-click="editImageUrl('/img/img_to_url/other/9.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/10.png" ng-click="editImageUrl('/img/img_to_url/other/10.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/11.png" ng-click="editImageUrl('/img/img_to_url/other/11.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/12.png" ng-click="editImageUrl('/img/img_to_url/other/12.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/13.png" ng-click="editImageUrl('/img/img_to_url/other/13.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/14.png" ng-click="editImageUrl('/img/img_to_url/other/14.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/15.png" ng-click="editImageUrl('/img/img_to_url/other/15.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/16.png" ng-click="editImageUrl('/img/img_to_url/other/16.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/17.png" ng-click="editImageUrl('/img/img_to_url/other/17.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/18.png" ng-click="editImageUrl('/img/img_to_url/other/18.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/19.png" ng-click="editImageUrl('/img/img_to_url/other/19.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/20.png" ng-click="editImageUrl('/img/img_to_url/other/20.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/21.png" ng-click="editImageUrl('/img/img_to_url/other/21.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/22.png" ng-click="editImageUrl('/img/img_to_url/other/22.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/23.png" ng-click="editImageUrl('/img/img_to_url/other/23.png')"></div>
+					<div class="col-xs-2"><img src="/img/img_to_url/other/24.png" ng-click="editImageUrl('/img/img_to_url/other/24.png')"></div>
+
+					<div class="col-xs-12">
+						<hr>
+						<a href="http://vkclub.su/ru/stickers/" target="_blank" class="btn btn-sm btn-primary">База стикеров из ВК</a>
+						 <a href="https://youtu.be/ck8pSr11fOU" target="_blank"><i class="fa fa-tw fa-question-circle"></i> как работать с базой</a>
+					</div>
+				</div>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<div class="modal fade" id="search_city">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Выбор города</h4>
+			</div>
+			<div class="modal-body">
+				<p><b>Начните вводить название города:</b></p>
+				<input type="text" class="form-control" ng-model="city_filter" value="">
+
+				
+				<div class="city_result" ng-if="city_filter.length > 2"> 
+					<hr>
+					<div class="alert alert-info text-center"><b>Выберите город из списка:</b></div>
+					<ul>
+						<li ng-repeat="val in ya_regions | filter:city_filter" ng-click="setTrafficCity(val, w_city_edit)">{{val.city}}</li>
+					</ul>
+				</div>
+				<!-- <div class="alert alert-info text-center" ng-if="city_filter.length < 3 || !city_filter"><b>Здесь будут результаты поиска</b></div> -->
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+<div class="modal fade" id="set_token">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Ключ доступа группы</h4>
+			</div>
+			<div class="modal-body">
+				<!--<div class="alert alert-danger">На данный момент некоторые виджеты (лучший комментатор и репостер) работают некоректно с "ключём группы". Рекомендуем пока его не использовать.</div>-->
+
+
+				<label for="group_token" style="width: 100%;">
+					<b>Ключ доступа группы</b> 
+					(<a href="https://youtu.be/QtXl320kTxc" target="_blank">инструкция по созданию</a>)
+				</label><br>
+				<input id="group_token" ng-model="cover_opt.group_token" type="text" class="form-control">
+				<p style="padding-top: 5px;">
+					Ключ доступа должен быть со следующими правами: <b>управление сообществом, фотографии</b>
+				</p>
+				<button type="button" ng-click="checkToken()" class="btn btn-success" ng-disabled="checkTokenProgress == 'load'">Проверить ключ</button> 
+				<b id="key_good" ng-if="checkTokenProgress == 'good'" style="color: #158a15;"><i class="fa fa-tw fa-check"></i> Ключ прошёл проверку!</b>
+				<b id="key_good" ng-if="checkTokenProgress == 'load'"><i class="fa fa-tw fa-spinner fa-pulse"></i> Проверка ключа</b>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<script type="text/javascript" src="/js/ya_regions.js"></script>
+
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+
+<script type="text/javascript" src="/js/create_cover.js?65"></script>
+
+
+<link rel="stylesheet" href="/js/libs/angularjs-color-picker.min.css" />
+<script src="/js/libs/tinycolor-min.js"></script>
+<script src="/js/libs/angularjs-color-picker.min.js"></script>
+
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+<script src="/js/libs/angular-moment-picker.min.js"></script>
+<link href="/js/libs/angular-moment-picker.min.css" rel="stylesheet">
+
+<script type="text/javascript" src="/js/libs/date.format.js"></script>
+
+
+<link href="https://fonts.googleapis.com/css?family=Alice|Bad+Script|Comfortaa|El+Messiri|Exo+2|Kelly+Slab|Lobster|Lora|Marck+Script|Marmelad|Neucha|Old+Standard+TT|Pangolin|Pattaya|Philosopher|Poiret+One|Press+Start+2P|Roboto|Roboto+Slab|Ruslan+Display|Russo+One|Ubuntu|Underdog" rel="stylesheet">

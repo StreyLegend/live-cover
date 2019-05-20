@@ -1,0 +1,193 @@
+<%- include('../header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('../sidebar') -%>
+
+		<div class="col-xs-9">
+
+
+		<div class="panel-group" id="accordion">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#q1">
+							Как настроить формат даты и времени?
+						</a>
+					</h4>
+				</div>
+				<div id="q1" class="panel-collapse collapse">
+					<div class="panel-body">
+						<p>Формат даты задаётся с помощью указания специальных символов в поле "Формат даты". Какой символ за что отвечает - вы можете посмотреть в таблице ниже.</p>
+
+						<table class="table">
+							<tr>
+								<th>Символ</th>
+								<th>Описание</th>
+								<th>Пример</th>
+							</tr>
+							
+							<tr>
+								<th colspan="3" class="text-center">День</th>
+							</tr>
+							<tr>
+								<td>d</td>
+								<td>День месяца, 2 цифры с нулями</td>
+								<td>01 - 31</td>
+							</tr>
+							<tr>
+								<td>D</td>
+								<td>Короткое название для недели (2 буквы)</td>
+								<td>Пн. Ср. Пт.</td>
+							</tr>
+							<tr>
+								<td>j</td>
+								<td>День месяца, без нулей в начале</td>
+								<td>1 - 31</td>
+							</tr>
+							<tr>
+								<td>l</td>
+								<td>Полное название дня недели</td>
+								<td>Понедельник, Вторник</td>
+							</tr>
+							
+							
+							<tr>
+								<th colspan="3" class="text-center">Месяц</th>
+							</tr>
+							<tr>
+								<td>F</td>
+								<td>Полное название текущего месяца</td>
+								<td>Январь, Февраль</td>
+							</tr>
+							<tr>
+								<td>m</td>
+								<td>Порядковый номер текущего месяца (с нулями)</td>
+								<td>01 - 12</td>
+							</tr>
+							<tr>
+								<td>M</td>
+								<td>Короткое название текущего месяца (3 буквы)</td>
+								<td>Янв., Фев.</td>
+							</tr>
+							<tr>
+								<td>n</td>
+								<td>Порядковый номер текущего месяца (без нулей)</td>
+								<td>1 - 12</td>
+							</tr>
+							
+							<tr>
+								<th colspan="3" class="text-center">Год</th>
+							</tr>
+							<tr>
+								<td>Y</td>
+								<td>Полное число текущего года</td>
+								<td>1999, 2003</td>
+							</tr>
+							<tr>
+								<td>y</td>
+								<td>Последние две цифры текущего года</td>
+								<td>99, 03</td>
+							</tr>
+							
+							<tr>
+								<th colspan="3" class="text-center">Время</th>
+							</tr>
+							<tr>
+								<td>a</td>
+								<td>Lowercase Ante meridiem and Post meridiem</td>
+								<td>am или pm</td>
+							</tr>
+							<tr>
+								<td>A</td>
+								<td>Uppercase Ante meridiem and Post meridiem</td>
+								<td>AM или PM</td>
+							</tr>
+							<tr>
+								<td>g</td>
+								<td>12-часовой формат часа без начальных нулей</td>
+								<td>1 - 12</td>
+							</tr>
+							<tr>
+								<td>G</td>
+								<td>24-часовой формат часа без начальных нулей</td>
+								<td>0 - 23</td>
+							</tr>
+							<tr>
+								<td>h</td>
+								<td>12-часовой формат часа с нулями в начале</td>
+								<td>01 - 12</td>
+							</tr>
+							<tr>
+								<td>H</td>
+								<td>24-часовой формат часа с нулями в начале</td>
+								<td>00 - 23</td>
+							</tr>
+							<tr>
+								<td>i</td>
+								<td>Минуты</td>
+								<td>00 - 59</td>
+							</tr>
+							<tr>
+								<td>s</td>
+								<td>Секунды</td>
+								<td>00 - 59</td>
+							</tr>
+							
+						</table>
+					</div>
+				</div>
+			</div>
+
+
+
+<!-- 
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<h4 class="panel-title">
+						<a data-toggle="collapse" data-parent="#accordion" href="#q2">
+							Где взять ID YouTube канала?
+						</a>
+					</h4>
+				</div>
+				<div id="q2" class="panel-collapse collapse">
+					<div class="panel-body">
+						<p>
+							Откройте страницу с видеозаписями интересующего вас канала. <br>
+							Ссылка страничы будет иметь следующий вид: <code>https://www.youtube.com/channel/XXXXXXXXXXX/videos</code>
+						
+							<br><code>XXXXXXXXXXX</code> <b>- это и есть ID канала</b>.
+						</p>
+
+						<h4>Что делать если у вас ссылка имеет другой внешний вид:</h4>
+						<p>
+							Часто встречаются каналы с ссылкой вида <code>https://www.youtube.com/user/XXXXXXXXXXX/videos</code>. 
+							Если у вас именно так, то откройте любое видео с данного канала, затем наведите курсор на <b>название канала</b> и скопируйте ссылку.
+						</p>
+						<p>
+							Скопированная ссылка будет иметь требуемый внешний вид <code>https://www.youtube.com/channel/XXXXXXXXXXX/videos</code>
+						</p>
+					</div>
+				</div>
+			</div> -->
+
+
+
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+
+
+<script>
+$(document).ready(function () {
+	if(location.hash) {
+		var hashId = location.hash;
+		$(''+hashId).collapse('show').parents('.panel').addClass('panel-primary')
+	}
+});
+</script>
+
+<%- include('../footer') -%>

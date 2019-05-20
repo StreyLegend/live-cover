@@ -1,0 +1,36 @@
+{
+  "name": "node_likes",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app.js --ignore public/",
+    "serv": "node --optimize_for_size --max_old_space_size=460 --gc_interval=100 app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.0",
+    "body-parser": "^1.17.1",
+    "canvas": "^1.6.5",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "express-fileupload": "^0.1.2",
+    "express-mysql-session": "^1.2.0",
+    "express-session": "^1.15.2",
+    "js-md5": "^0.6.0",
+    "mysql": "^2.15.0",
+    "nconf": "^0.8.4",
+    "passport": "^0.3.2",
+    "passport-vkontakte": "^0.3.2",
+    "path": "^0.12.7",
+    "request": "^2.81.0",
+    "rss-parser": "^2.10.1",
+    "sha1": "^1.1.1",
+    "sha256": "^0.2.0",
+    "vk-io": "^3.1.1",
+    "xml-parser": "^1.2.1"
+  },
+  "description": ""
+}

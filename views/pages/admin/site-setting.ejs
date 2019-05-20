@@ -1,0 +1,31 @@
+<%- include('../../header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('../../sidebar') -%>
+
+		<div class="col-xs-9">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<b>Опции</b>
+				</div>
+				<div class="panel-body">
+			
+					<div class="fl_r">
+						<a href="/auth/vk/" class="btn btn-success">Обновить токен</a> 
+						<a href="#" class="btn btn-primary">Проверить</a>
+					</div>
+					<b>Токены для работы с VK:</b><br>
+					<%= options.vk_token.slice(0, 15) %>...<%= options.vk_token.slice(options.vk_token.length-15, options.vk_token.length) %>
+
+
+
+				</div>
+			</div>
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+<%- include('../../footer') -%>

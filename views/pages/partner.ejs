@@ -1,0 +1,150 @@
+<%- include('../header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('../sidebar') -%>
+
+		<div class="col-xs-9">
+			<div class="row">
+				<div class="col-xs-8">
+					<div class="panel panel-default">
+						<div class="panel-heading"><b>Партнерская программа</b></div>
+						<div class="panel-body">
+							<b>Ваша партнёрская ссылка:</b><br>
+							<input type="text" class="form-control" value="http://live-cover.ru/ref/<%= user.vk_id %>" readonly style="margin-bottom: 15px;">
+
+							Текущий партнёрский баланс: <span class="label label-primary"><%= ref_balance %> <i class="fa fa-ruble"></i></span><br>
+							Зарегистрировано рефералов: <span class="label label-primary"><%= referrals.length %></span> <span style="border-bottom: 1px dashed; color: #E57373; cursor: pointer;" onclick="$('#my_referral').modal('show')">показать список</span>
+							
+							<hr>
+
+							<!--<p>На данный момент сервис работает абсолютно бесплатно для всех желающих, но примерно к середине - концу лета, мы перейдем на платную систему пользования. </p>-->
+							<p>Все зарегистрировавшиеся по ваше ссылке пользователи, будут закреплены за вами. Вы будете получать по <span style="border-bottom: 1px dotted #000;" data-toggle="tooltip" data-original-title="Все новые партнёры получают 10%. Для активных партнёров мы будем повышать отчисления вплоть до 20%">10-20%</span> с каждой их оплаты.</p>
+							<p>Для привлечения рефералов запрещается использовать: спам, мотивированный трафик, кликандеры и, остальные серые и черные источники трафика.</p>
+						
+							<hr>
+							<p>
+								Вывод средств пока осуществляется вручную. Минимальная сумма на вывод 500 рублей.<br>
+								Вы также можете обменять заработанные деньги на "ресурсы" для обновления обложки, с бонусом 30%.<br><br>
+								
+								Отправить заявку на вывод можно <a href="https://vk.com/im?media=&sel=-85107772" target="_blank">тут</a>.
+							</p> 
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="col-xs-4">
+					<div class="panel panel-warning">
+						<div class="panel-heading"><b>Покупка ресурсов</b></div>
+						<div class="panel-body">
+							<div class="form-group">
+								<b>Сумма:</b> 
+								<input type="number" max="100" class="form-control" id="sum">
+								<p><span onclick="max_val(<%= ref_balance %>)" style="border-bottom: 1px dashed #03A9F4; color: #03A9F4; cursor: pointer;">Максимум <%= ref_balance %> руб.</span></p>
+							</div>
+
+							<button class="btn btn-success" id="get_resurse">Обменять на ресурсы</button>
+						</div>
+					</div>
+				</div>
+
+
+				<div class="clearfix"></div>
+
+			<div class="col-xs-12">
+				<div class="panel panel-default">
+						<div class="panel-heading ">
+							<b>История баланса</b>
+						</div>
+						<div class="panel-body">
+							<table class="table">
+								<tr>
+									<th>Платёж от</th>
+									<th>Сумма</th>
+									<th>Дата</th>
+								</tr>
+
+								<% for(var i in history) { %>
+									<tr>
+										<td><a href="https://vk.com/id<%= history[i].from_id %>" target="_blank"><%= history[i].from_id %></a></td>
+										<td><%= history[i].sum %></td>
+										<td><%= history[i].date %></td>
+									</tr>
+								<% } %>
+
+							</table>
+						</div>
+					</div>
+
+			</div>
+
+			
+			</div>
+
+			
+		</div>
+
+
+
+		
+
+	</div> <!-- end container row -->
+</div>
+
+
+<div class="modal fade" id="my_referral">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Список ваших рефералов</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+						<!--<tr>
+							<th>Пользователь</th>
+						</tr>-->
+
+						<% for(var i in referrals) { %>
+							<tr>
+								<td><a href="https://vk.com/id<%= referrals[i].vk_id %>" target="_blank"><%= referrals[i].vk_id %></a></td>
+							</tr>
+						<% } %>
+
+					</table>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+<script>
+get_resurse.onclick = function(){
+	var test = confirm('Вы подтверждаете что хотите купить ресурсы (с 30% бонусом) за деньги с партнёрской программы?')
+	if(test) {
+		 $.ajax({
+			type: "post",
+			url: "/partners/get_resurce/",
+			data: {
+				sum: $('#sum').val()
+			},
+			success: function (response) {
+				if(response == 'OK')
+					location.reload();
+				else
+					alert('Что-то пошло не так!')
+			}
+		});
+	}
+}
+
+function max_val(val) {
+	$('#sum').val(val);
+}
+</script>
+
+<%- include('../footer') -%>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Динамическая обложка</title>
+	<link rel="shortcut icon" href="/land/favicon.ico">
+
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<script src="/js/jquery-3.1.1.min.js"></script>
+
+	
+	<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+	<script src="/js/main.js"></script>
+	
+</head>
+<body>
+
+<div id="header">
+	<div class="container">
+		<div class="col-xs-6">
+			<a href="/cabinet" class="brand"><b>Live-Cover.ru</b></a>
+		</div>
+
+		<div class="col-xs-6 text-right">
+			<div class="dropdown">
+				ID: <b data-toggle="tooltip" data-placement="bottom" title="Данный ID вы можете сообщить другим пользователям. Чтобы они могли передать вам в управление свои обложки."><%= user.vk_id %></b>
+				<div class="btn-profile" data-toggle="dropdown">
+					<img src="<%= session.vk_info.photo || 'https://vk.com/images/camera_50.png' %> ">
+					<%= session.vk_info.full_name || 'Имя Фамилия' %> <i class="fa fa-tw fa-caret-down"></i>
+				</div>
+				<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+					<li><a href="/cabinet/partner/"><i class="fa fa-tw fa-dollar"></i> Партнерская программа</a></li>
+					<li><a href="/logout/"><i class="fa fa-tw fa-sign-out"></i> Выход</a></li>
+				</ul>
+			</div>
+			
+			<!--<a href="/logout/"><i class="fa fa-tw fa-sign-out"></i> Выход</a>-->
+		</div>
+	</div>
+</div>
+

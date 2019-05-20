@@ -1,0 +1,147 @@
+<%- include('../../header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('../../sidebar') -%>
+
+		<div class="col-xs-9">
+			<div class="panel panel-default">
+				<div class="panel-body">
+					<div class="row metriki">
+
+						<div class="col-xs-3 metriki-col">
+							Сегодня<br>
+							<p><%= metriki[0][0] %></p>
+							<p class="ref"><%= metriki[0][1] %></p>
+						</div>
+
+						<div class="col-xs-3 metriki-col">
+							За неделю<br>
+							<p><%= metriki[1][0] %></p>
+							<p class="ref"><%= metriki[1][1] %></p>
+						</div>
+
+						<div class="col-xs-3 metriki-col">
+							За месяц<br>
+							<p><%= metriki[2][0] %></p>
+							<p class="ref"><%= metriki[2][1] %></p>
+						</div>
+
+						<div class="col-xs-3 metriki-col">
+							За 3 месяца<br>
+							<p><%= metriki[3][0] %></p>
+							<p class="ref"><%= metriki[3][1] %></p>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+
+
+			
+			<div class="panel panel-default" id="chart">
+				<div class="panel-body">
+						<chartjs-bar :height="100" :labels="mylabels" :data="mydata"></chartjs-bar>
+				</div>
+			</div>
+			
+
+
+
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					<b style="padding-top: 5px;
+    display: inline-block;
+    font-size: 15px;">Пользователи <span class="label label-primary"></span></b>
+
+					<!--a href="/run_cron" style="float: right; margin: 0 10px;" class="btn btn-sm btn-primary">Тест</a-->
+				</div>
+				<div class="panel-body">
+
+					<table class="table">
+						<tr class="text-center">
+							<th  class="text-center">ID</th>
+							<th  class="text-center">Ссылка в vk</th>
+							<th  class="text-center">Баланс</th>
+							<th  class="text-center">Роль</th>
+							<th  class="text-center">Реферал</th>
+							<th  class="text-center">Дата регистрации</th>
+							<th  class="text-center"></th>
+						</tr>
+
+						<% users.forEach(function(user, i) { %>
+							<tr class="text-center">
+								<td><%= user.id %></td>
+								<td><a href="https://vk.com/id<%= user.vk_id %>" target="_blank"><%= user.vk_id %></a></td>
+								<td><%= user.balance %></td>
+								<td><%= user.role %></td>
+								<td><%= user.ref %></td>
+								<td><%= user.date %></td>
+								<td class="text-right" style="width: 50px;"><a href="#" class="btn btn-sm btn-success"><i class="fa fa-edit"></i></a></td>
+							</tr>
+						<% }); %>
+						<!-- /balance_up/<%= user.id %>/10000 -->
+
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
+<script src="//vue-charts.hchspersonal.tk/js/vue-charts.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.min.js"></script>
+<script>
+	var labels = [];
+	var reg_data = []
+	
+	for (let i=0; i<90; i++) {
+		labels.push(i+1);
+		reg_data.push(0);
+	}
+
+	$(document).ready(function () {
+		var trUsers = $('.table tr:not(:first-child)');
+		var dateStrings = {};
+
+		$.each(trUsers, function (i, val) {
+
+			if(dateStrings.length > 90) return false;
+
+			var loadDataString = $('td', this)[5];
+			loadDataString = $(loadDataString).text();
+			
+			var date = new Date(loadDataString);
+			var dateString = date.getMonth()+'_'+date.getDate()+'_'+date.getFullYear();
+
+			if(!dateStrings[dateString]) dateStrings[dateString] = 0;
+			dateStrings[dateString] += 1;
+		});
+
+		var offset = 0;
+		$.each(dateStrings, function (i, val) {
+			if(offset >= 90) return false;
+
+			offset += 1;
+			reg_data[reg_data.length - offset] = val;
+		});
+
+		console.log(reg_data)
+
+		
+		Vue.use(VueCharts);
+		const app = new Vue({
+			el: '#chart',
+			data: {
+				mylabels: labels,
+				mydata: reg_data
+			}
+		});
+	});
+</script>
+
+
+<%- include('../../footer') -%>

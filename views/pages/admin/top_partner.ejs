@@ -1,0 +1,46 @@
+<%- include('../../header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('../../sidebar') -%>
+
+		<div class="col-xs-9">
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					<b style="padding-top: 5px;
+    display: inline-block;
+    font-size: 15px;">Пользователи <span class="label label-primary"></span></b>
+
+					<!--a href="/run_cron" style="float: right; margin: 0 10px;" class="btn btn-sm btn-primary">Тест</a-->
+				</div>
+				<div class="panel-body">
+					<table class="table">
+						<tr>
+							<th>ID</th>
+							<th>Ссылка в vk</th>
+							<th>Кол-во рефералов</th>
+							<th>На партнёрском балансе</th>
+						</tr>
+
+						<% for(var i in partners) { %>
+							<tr>
+								<td>---</td>
+								<td><a href="https://vk.com/id<%= partners[i].id %>" target="_blank">
+									<img src="<%= partners[i].photo %>" style="width: 25px; border-radius: 50%;"> 
+									<b><%= partners[i].name %></b>
+								</a></td>
+								<td><%= partners[i].count %></td>
+								<td><%= partners[i].ref_balance %></td>
+							</tr>
+						<% } %>
+
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+<%- include('../../footer') -%>

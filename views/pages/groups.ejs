@@ -1,0 +1,51 @@
+<%- include('../header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('../sidebar') -%>
+
+		<div class="col-xs-9">
+			<div class="alert alert-info">
+					<b>Внимание!</b> В данном списке отображаются только те сообщества, в которых у вас достаточно прав для установки "обложки"
+			</div>
+			<div class="panel panel-default">
+				<div class="panel-heading"><b>Группы</b> <span class="label label-primary"><%= groups.count %></span></div>
+				<div class="panel-body">
+					<% groups['items'].forEach(function(group, i){ %>
+						<div class="group_li ">
+							<div class="group_li_info">
+								<img src="<%= group.photo_50 %>">
+								<b><%= group.name %></b>
+
+								<!--<% if(group.freeze_status == 1) { %>
+									<a href="/auth/vk" style="text-decoration: none;"><span class="label label-info" data-toggle="tooltip" data-original-title="У вас устарел token. Вам необходимо повторно авторизироватся на сайте. Кликните чтобы сделать это!"><i class="fa fa-tw fa-snowflake-o"></i> заморожено</span></a>
+								<% } else if(group.freeze_status == 2) { %>
+									<span class="label label-info" data-toggle="tooltip" data-original-title="У вас устарел token. Кликните чтобы обновить его"><i class="fa fa-tw fa-snowflake-o"></i> 222 заморожено</span>
+								<% } else { %>
+									<% if(group.status == 1) { %>
+									<span class="label label-success" style="margin-left: 5px;">работает</span>
+									<% } else if(group.status == 0) { %>
+										<span class="label label-warning" style="margin-left: 5px;">отключено</span>
+									<% } %>
+								<% } %>-->
+
+
+								<% if(group.secret_key) { %>
+									<!--<a href="/cabinet/edit_cover/<%= group.secret_key %>" style="float: right;" class="btn btn-primary">Редактировать</a>-->
+									<a href="/cabinet/create_cover/<%= group.id %>" style="float: right;" class="btn btn-primary">Создать ещё обложку</a>
+								<% } else { %>
+									<a href="/cabinet/create_cover/<%= group.id %>" style="float: right;" class="btn btn-success">Создать обложку</a>
+								<% } %>
+							</div>
+						</div>
+					<% }); %>
+
+				</div>
+			</div>
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+<%- include('../footer') -%>

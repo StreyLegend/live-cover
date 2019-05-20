@@ -1,0 +1,77 @@
+<div class="col-xs-3">
+	<div id="profile-balanse">
+		<!--<div class="dropdown" style="float: right;">
+			<a href="#" data-toggle="dropdown" class="profile-link"><i class="fa fa-cog"></i></a>
+			<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+				<li><a href="/logout/"><i class="fa fa-power-off"></i> Настройки</a></li>
+				<li><a href="/logout/"><i class="fa fa-power-off"></i> Выход</a></li>
+			</ul>
+		</div>-->
+		
+		Ресурсы: <b><span id="balance_value"><%= user.balance %></span></b> <i class="fa fa-diamond"></i><br>
+		<a href="/cabinet/buy/">Пополнить →</a>
+	</div>
+	
+
+	<div class="list-group sidebar-nav">
+		<a class="list-group-item" href="/cabinet/"><i class="fa fa-tw fa-home"></i> Главная</a>
+		<a class="list-group-item" href="/cabinet/groups/"><i class="fa fa-tw fa-list"></i> Мои группы</a>
+		<a class="list-group-item" href="/cabinet/cover/"><i class="fa fa-tw fa-photo"></i> Мои обложки</a>
+		<!--a class="list-group-item" href="#"><i class="fa fa-question-circle"></i> FAQ</a>
+		<a class="list-group-item" href="#"><i class="fa fa-support"></i> Тех. поддержка</a-->
+	</div>
+
+	<div class="list-group sidebar-nav">
+		<a class="list-group-item" href="/cabinet/partner"><i class="fa fa-tw fa-dollar"></i> Партнерская программа</a>
+		<a class="list-group-item" href="/auth/vk"><i class="fa fa-tw fa-refresh"></i> Обновить ключ доступа</a>
+	</div>
+	
+	<div class="panel panel-default">
+		<div class="panel-body">
+			<p>Подпишитесь на нашу группу Вконтакте, чтобы своевременно узнавать о нововведениях.</p>
+			<a href="https://vk.com/live__cover" target="_blank" class="btn btn-sm btn-primary">Мы Вконтакте</a>
+		</div>
+	</div>
+
+
+	<div class="footer_links">
+		<% if(show_feed_back == 1) { %>
+		<a href="https://vk.com/topic-85107772_35960917" target="_blank" style="color: #6c99ad;"><b>Оставить отзыв</b></a><br>
+		<% } %>
+
+		<a href="https://vk.com/topic-85107772_35798045" target="_blank">Предложить идею</a><br>
+		<a href="https://vk.com/im?sel=-85107772" target="_blank">Помощь</a>
+	</div>
+
+
+	<% if(user.vk_id == 234395370) { %>
+	<hr>
+	<b>Админ панель</b> <buttom class="btn btn-xs btn-primary" style="float: right;" onclick="$('#admin_aidebar').toggle()">Показать/Скрыть</buttom>
+	<div id="admin_aidebar" style="display: none;">
+		<div class="clearfix"></div>
+		
+
+		<div class="list-group sidebar-nav" style="margin-top: 10px;">
+			<a class="list-group-item" href="/dashboard/" target="_blank"><i class="fa fa-dashboard"></i> Dashboard</a>
+		</div>
+
+		<div class="list-group sidebar-nav">
+			<a class="list-group-item" href="/users/"><i class="fa fa-users"></i> Пользователи</a>
+			<a class="list-group-item" href="/covers/"><i class="fa fa-photo"></i> Обложки пользователей</a>
+			<a class="list-group-item" href="/payments/"><i class="fa fa-shopping-cart"></i> Платежи пользователей</a>
+			<!--a class="list-group-item" href="#"><i class="fa fa-cog"></i> Настройка</a>
+			<a class="list-group-item" href="#"><i class="fa fa-edit"></i> Модерация</a>
+			<a class="list-group-item" href="#"><i class="fa fa-support"></i> Тикеты</a>
+			<a class="list-group-item" href="#"><i class="fa fa-bar-chart"></i> Статистика</a-->
+		</div>
+
+		<div class="list-group sidebar-nav">
+			<a class="list-group-item" href="/top_partner/"><i class="fa fa-dollar"></i> Топ партнёров</a>
+			<a class="list-group-item" href="/partner_balance/"><i class="fa fa-dollar"></i> Операции партнёров</a>
+		</div>
+	</div>
+	<% } %>
+	
+</div>
+
+

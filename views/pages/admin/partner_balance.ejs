@@ -1,0 +1,104 @@
+<%- include('../../header') -%>
+
+<div class="container">
+	<div class="row">
+		<%- include('../../sidebar') -%>
+
+		<div class="col-xs-9">
+			<div class="panel panel-default">
+				<div class="panel-heading clearfix">
+					<b style="padding-top: 5px;
+    display: inline-block;
+	 font-size: 15px;">Статистика партнёров <span class="label label-primary"></span></b>
+	 
+					<button style="float: right;" class="btn btn-sm btn-primary" onclick="$('#add_history').modal('show')">Списать с баланса</button>
+				</div>
+				<div class="panel-body">
+					<table class="table">
+						<tr>
+							<th>Партнёр</th>
+							<th>Платёж от</th>
+							<th>Сумма</th>
+							<th>Дата</th>
+						</tr>
+
+						<% for(var i in part_balance) { %>
+							<tr>
+								<td><a href="https://vk.com/id<%= part_balance[i].partner_vk_id %>" target="_blank"><%= part_balance[i].partner_vk_id %></a></td>
+								<td><a href="https://vk.com/id<%= part_balance[i].from_id %>" target="_blank"><%= part_balance[i].from_id %></a></td>
+								<td><%= part_balance[i].sum %></td>
+								<td><%= part_balance[i].date %></td>
+							</tr>
+						<% } %>
+
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div> <!-- end container row -->
+</div>
+
+
+
+<div class="modal fade" id="add_history">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Списать с баланса парнтёра</h4>
+			</div>
+			<div class="modal-body">
+				<form action="#">
+					<div class="control-label">
+						<b>VK ID</b><br>
+						<input type="text" class="form-control" name="vk_id">
+					</div> <br>
+					<div class="control-label">
+						<b>Сумма списания</b> (- не нужно ставить)<br>
+						<input type="text" class="form-control" name="sum">
+					</div><br>
+					<label><input type="checkbox" id="send_resurse"> начислить на эту сумму ресурсы</label><br><br>
+					
+					<button type="button" id="send_form" class="btn btn-success">Отправить данные</button>
+				</form>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+
+
+<script>
+$(document).ready(function () {
+	send_form.onclick = function() {
+		var test = confirm('Подтвердите действие!')
+		if(test) {
+			 $.ajax({
+				type: "post",
+				url: "/partners/write_off/",
+				data: {
+					vk_id: $('[name="vk_id"]').val(),
+					sum: $('[name="sum"]').val(),
+					add_res: $('#send_resurse').prop('checked')
+				},
+				success: function (response) {
+					if(response == 'OK')
+						location.reload();
+					else
+						alert('Чтото пошло не так!')
+				}
+			});
+		}
+
+	};
+
+
+
+
+});
+</script>
+
+<%- include('../../footer') -%>
